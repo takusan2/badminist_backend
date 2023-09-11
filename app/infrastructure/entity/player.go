@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	"github.com/takuya-okada-01/badminist/app/command/domain/community/player"
+	"github.com/takuya-okada-01/badminist/app/domain/community/player"
 )
 
 type Player struct {

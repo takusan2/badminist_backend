@@ -3,7 +3,7 @@ package member
 import (
 	"testing"
 
-	"github.com/takuya-okada-01/badminist/app/command/domain/user"
+	"github.com/takuya-okada-01/badminist/app/domain/user"
 )
 
 func TestMember_ChangeRole(t *testing.T) {

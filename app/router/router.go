@@ -5,7 +5,7 @@ import (
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
-	"github.com/takuya-okada-01/badminist/app/command/interface_adoptor_impl/controller"
+	"github.com/takuya-okada-01/badminist/app/interface_adoptor_impl/controller"
 )
 
 type Router struct {

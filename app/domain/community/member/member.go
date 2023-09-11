@@ -1,6 +1,6 @@
 package member
 
-import "github.com/takuya-okada-01/badminist/app/command/domain/user"
+import "github.com/takuya-okada-01/badminist/app/domain/user"
 
 type Member struct {
 	id     MemberId

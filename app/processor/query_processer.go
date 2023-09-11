@@ -4,11 +4,11 @@ import (
 	"errors"
 	"math/rand"
 
-	"github.com/takuya-okada-01/badminist/app/command/domain/community"
-	"github.com/takuya-okada-01/badminist/app/command/domain/community/player"
-	"github.com/takuya-okada-01/badminist/app/command/interface_adaptor_if/dao_if"
-	"github.com/takuya-okada-01/badminist/app/command/readmodel"
+	"github.com/takuya-okada-01/badminist/app/domain/community"
+	"github.com/takuya-okada-01/badminist/app/domain/community/player"
 	"github.com/takuya-okada-01/badminist/app/infrastructure/entity"
+	"github.com/takuya-okada-01/badminist/app/interface_adaptor_if/dao_if"
+	"github.com/takuya-okada-01/badminist/app/readmodel"
 
 	"gorm.io/gorm"
 )

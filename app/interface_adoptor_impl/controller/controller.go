@@ -6,12 +6,12 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
-	"github.com/takuya-okada-01/badminist/app/command/domain/community"
-	"github.com/takuya-okada-01/badminist/app/command/domain/community/member"
-	"github.com/takuya-okada-01/badminist/app/command/domain/community/player"
-	"github.com/takuya-okada-01/badminist/app/command/domain/user"
-	"github.com/takuya-okada-01/badminist/app/command/interface_adoptor_impl/dto"
-	"github.com/takuya-okada-01/badminist/app/command/processor"
+	"github.com/takuya-okada-01/badminist/app/domain/community"
+	"github.com/takuya-okada-01/badminist/app/domain/community/member"
+	"github.com/takuya-okada-01/badminist/app/domain/community/player"
+	"github.com/takuya-okada-01/badminist/app/domain/user"
+	"github.com/takuya-okada-01/badminist/app/interface_adoptor_impl/dto"
+	"github.com/takuya-okada-01/badminist/app/processor"
 )
 
 type Controller struct {

@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"github.com/takuya-okada-01/badminist/app/command/domain/user"
-	"github.com/takuya-okada-01/badminist/app/command/interface_adaptor_if/dao_if"
-	"github.com/takuya-okada-01/badminist/app/command/interface_adaptor_if/repository_if.go"
+	"github.com/takuya-okada-01/badminist/app/domain/user"
 	"github.com/takuya-okada-01/badminist/app/infrastructure/entity"
+	"github.com/takuya-okada-01/badminist/app/interface_adaptor_if/dao_if"
+	"github.com/takuya-okada-01/badminist/app/interface_adaptor_if/repository_if.go"
 	"gorm.io/gorm"
 )
 

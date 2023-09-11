@@ -3,8 +3,8 @@ package entity
 import (
 	"time"
 
-	"github.com/takuya-okada-01/badminist/app/command/domain/community/member"
-	"github.com/takuya-okada-01/badminist/app/command/domain/user"
+	"github.com/takuya-okada-01/badminist/app/domain/community/member"
+	"github.com/takuya-okada-01/badminist/app/domain/user"
 )
 
 type Member struct {
