@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/joho/godotenv"
-	"github.com/takuya-okada-01/badminist/app/infrastructure/database"
-	"github.com/takuya-okada-01/badminist/app/interface_adoptor_impl/controller"
-	"github.com/takuya-okada-01/badminist/app/interface_adoptor_impl/dao"
-	"github.com/takuya-okada-01/badminist/app/interface_adoptor_impl/repository"
-	"github.com/takuya-okada-01/badminist/app/processor"
-	"github.com/takuya-okada-01/badminist/app/router"
+	"github.com/takuya-okada-01/badminist/api/infrastructure/database"
+	"github.com/takuya-okada-01/badminist/api/interface_adoptor_impl/controller"
+	"github.com/takuya-okada-01/badminist/api/interface_adoptor_impl/dao"
+	"github.com/takuya-okada-01/badminist/api/interface_adoptor_impl/repository"
+	"github.com/takuya-okada-01/badminist/api/processor"
+	"github.com/takuya-okada-01/badminist/api/router"
 )
 
 func main() {

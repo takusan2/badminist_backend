@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/joho/godotenv"
-	"github.com/takuya-okada-01/badminist/app/infrastructure/database"
-	"github.com/takuya-okada-01/badminist/app/infrastructure/entity"
+	"github.com/takuya-okada-01/badminist/api/infrastructure/database"
+	"github.com/takuya-okada-01/badminist/api/infrastructure/entity"
 )
 
 func main() {
