@@ -1,7 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 	"github.com/takuya-okada-01/badminist/api/infrastructure/database"
 
 	command_controller "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller/command"
@@ -15,6 +18,18 @@ import (
 
 	"github.com/takuya-okada-01/badminist/api/router"
 )
+
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+	log.SetOutput(os.Stdout)
+
+	// Only log the warning severity or above.
+	log.SetLevel(log.DebugLevel)
+}
 
 func main() {
 	godotenv.Load(".env")
