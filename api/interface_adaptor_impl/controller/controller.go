@@ -10,7 +10,7 @@ import (
 	"github.com/takuya-okada-01/badminist/api/domain/community/member"
 	"github.com/takuya-okada-01/badminist/api/domain/community/player"
 	"github.com/takuya-okada-01/badminist/api/domain/user"
-	"github.com/takuya-okada-01/badminist/api/interface_adoptor_impl/dto"
+	"github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/dto"
 	"github.com/takuya-okada-01/badminist/api/processor"
 )
 
@@ -574,4 +574,19 @@ func (c *Controller) Login(ctx echo.Context) error {
 		return ctx.JSON(400, err.Error())
 	}
 	return ctx.JSON(200, token)
+}
+
+func (c *Controller) GetCommunityList(ctx echo.Context) error {
+	id := GetCurrentUser(ctx)
+	userId, err := user.UserIdFromStr(id)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	communityList, err := c.queryProcessor.GetCommunityList(
+		userId,
+	)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	return ctx.JSON(200, communityList)
 }

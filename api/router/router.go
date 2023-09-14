@@ -5,7 +5,7 @@ import (
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
-	"github.com/takuya-okada-01/badminist/api/interface_adoptor_impl/controller"
+	"github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller"
 )
 
 type Router struct {
@@ -49,9 +49,14 @@ func NewRouter(controller controller.Controller) *echo.Echo {
 		eu.POST("/login", controller.Login)
 	}
 
+	// Query
 	em := e.Group("/mathces")
 	{
 		em.GET("/generate-match-combination/:community-id/:num-court/:rule", controller.GenerateMatchCombination)
+	}
+
+	{
+		ec.GET("", controller.GetCommunityList)
 	}
 	return e
 }

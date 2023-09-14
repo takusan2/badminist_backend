@@ -6,6 +6,7 @@ import (
 
 	"github.com/takuya-okada-01/badminist/api/domain/community"
 	"github.com/takuya-okada-01/badminist/api/domain/community/player"
+	"github.com/takuya-okada-01/badminist/api/domain/user"
 	"github.com/takuya-okada-01/badminist/api/infrastructure/entity"
 	"github.com/takuya-okada-01/badminist/api/interface_adaptor_if/dao_if"
 	"github.com/takuya-okada-01/badminist/api/readmodel"
@@ -37,6 +38,9 @@ type QueryProcessor interface {
 		numCourt int,
 		rule Rule,
 	) (readmodel.MatchCombination, error)
+	GetCommunityList(
+		userId user.UserId,
+	) ([]entity.Community, error)
 }
 
 type queryProcessor struct {
@@ -135,4 +139,10 @@ func (q *queryProcessor) generateDoublesMatchCombination(
 		matches = append(matches, readmodel.Match{Left: left, Right: right})
 	}
 	return matches, restPlayer
+}
+
+func (q *queryProcessor) GetCommunityList(
+	userId user.UserId,
+) ([]entity.Community, error) {
+	return q.CommunityDao.FindCommunitiesByUserId(q.db, userId)
 }

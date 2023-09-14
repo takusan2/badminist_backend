@@ -3,20 +3,22 @@
 ## ディレクトリ構成
 
 ```
-- domain
-    - user
-    - community
-    - player
-    - players
-- command
-    - dao
-    - repository
-    - controller
+- api
+	- domain
+	    - user
+	    - community
+	    - player
+	- infrastructure
+	- interface_adaptor_if
+	- interface_adaptor_impl
+		- controller
+	    - dao
+	    - dto
+	    - repository
     - processor
-- query
-    - read_model
-    - dao
-    - repository
-    - controller
-    - processor
+	    - command_processor
+	    - query_processor
+	- readmodel
+	- router
+	- utils
 ```

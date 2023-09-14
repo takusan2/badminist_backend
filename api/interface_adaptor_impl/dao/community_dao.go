@@ -32,8 +32,16 @@ func (*CommunityDaoImpl) FindCommunitiesByUserId(
 	db *gorm.DB,
 	userId user.UserId,
 ) ([]entity.Community, error) {
+	var members []entity.Member
+	if err := db.Where("user_id = ?", userId.Value()).Find(&members).Error; err != nil {
+		return nil, err
+	}
+	var communityIds []string
+	for _, member := range members {
+		communityIds = append(communityIds, member.CommunityId)
+	}
 	var communities []entity.Community
-	if err := db.Where("user_id = ?", userId.Value()).Find(&communities).Error; err != nil {
+	if err := db.Where("id IN ?", communityIds).Find(&communities).Error; err != nil {
 		return nil, err
 	}
 	return communities, nil
@@ -251,7 +259,7 @@ func (*CommunityDaoImpl) UpdatePlayer(
 	communityId community.CommunityId,
 	playerId player.PlayerId,
 	playerName player.PlayerName,
-	plyaerGender player.PlayerGender,
+	playerGender player.PlayerGender,
 	playerAge player.PlayerAge,
 	playerLevel player.PlayerLevel,
 	playerNumGames player.PlayerNumGames,
@@ -265,7 +273,7 @@ func (*CommunityDaoImpl) UpdatePlayer(
 		).Updates(
 		map[string]any{
 			"name":      playerName.Value(),
-			"gender":    plyaerGender.Value(),
+			"gender":    playerGender.Value(),
 			"age":       playerAge.Value(),
 			"level":     playerLevel.Value(),
 			"num_games": playerNumGames.Value(),
