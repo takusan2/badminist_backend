@@ -18,7 +18,7 @@
     - processor
 	    - command_processor
 	    - query_processor
-	- readmodel
+	- read_model
 	- router
 	- utils
 ```
