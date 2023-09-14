@@ -5,7 +5,7 @@ import (
 )
 
 type Community struct {
-	Id          string    `gorm:"type:varchar(36);primary_key;"`
+	Id          string    `gorm:"type:varchar(36);primaryKey;"`
 	Name        string    `gorm:"type:varchar(255);not null;"`
 	Description string    `gorm:"type:text;"`
 	CreatedAt   time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`

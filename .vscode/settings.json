@@ -6,6 +6,8 @@
     "gorm",
     "joho",
     "labstack",
-    "readmodel"
+    "logrus",
+    "readmodel",
+    "sirupsen"
   ]
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type Player struct {
-	Id          string    `gorm:"type:varchar(36);primary_key;"`
+	Id          string    `gorm:"type:varchar(36);primaryKey;"`
 	CommunityId string    `gorm:"type:varchar(36);not null;"`
 	Name        string    `gorm:"type:varchar(255);not null;"`
 	Gender      string    `gorm:"type:varchar(255);not null;"`

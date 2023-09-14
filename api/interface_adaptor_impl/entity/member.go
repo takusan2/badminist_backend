@@ -8,7 +8,7 @@ import (
 )
 
 type Member struct {
-	Id          string    `gorm:"primary_key auto_increment;"`
+	Id          string    `gorm:"primaryKey auto_increment;"`
 	UserId      string    `gorm:"type:varchar(36);not null;"`
 	User        User      `gorm:"foreignKey:UserId"`
 	CommunityId string    `gorm:"type:varchar(36);not null;"`
