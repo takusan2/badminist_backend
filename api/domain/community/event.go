@@ -80,8 +80,8 @@ type CommunityEventChangePlayerPropertyBody struct {
 	OccurredAt  time.Time
 }
 
-// CommunityEventResetNumGamseBody
-type CommunityEventResetNumGamseBody struct {
+// CommunityEventResetNumGamesBody
+type CommunityEventResetNumGamesBody struct {
 	CommunityId CommunityId
 	PlayerId    player.PlayerId
 	OccurredAt  time.Time

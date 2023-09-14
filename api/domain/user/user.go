@@ -48,7 +48,7 @@ func (u *User) BreachEncapsulationOfStatus() UserStatus {
 	return u.status
 }
 
-func (u *User) ReName(name UserName) error {
+func (u *User) ReNameUser(name UserName) error {
 	u.name = name
 	return nil
 }

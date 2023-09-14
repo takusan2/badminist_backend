@@ -273,18 +273,18 @@ func (c *Community) ChangePlayerProperty(
 func (c *Community) ResetPlayerNumGames(
 	playerId player.PlayerId,
 	executorId user.UserId,
-) (CommunityEventResetNumGamseBody, error) {
+) (CommunityEventResetNumGamesBody, error) {
 	if !c.members.IsMember(executorId) {
-		return CommunityEventResetNumGamseBody{}, fmt.Errorf("executor is not member")
+		return CommunityEventResetNumGamesBody{}, fmt.Errorf("executor is not member")
 	}
 	if !c.members.IsStaff(executorId) {
-		return CommunityEventResetNumGamseBody{}, fmt.Errorf("executor is not staff")
+		return CommunityEventResetNumGamesBody{}, fmt.Errorf("executor is not staff")
 	}
 	if !c.players.IsPlayer(playerId) {
-		return CommunityEventResetNumGamseBody{}, fmt.Errorf("player is not player")
+		return CommunityEventResetNumGamesBody{}, fmt.Errorf("player is not player")
 	}
 	c.players.ResetPlayerNumGames(playerId)
-	return CommunityEventResetNumGamseBody{
+	return CommunityEventResetNumGamesBody{
 		CommunityId: c.id,
 		PlayerId:    playerId,
 		OccurredAt:  time.Now(),

@@ -1,0 +1,142 @@
+openapi: '3.0.3'
+
+info:
+  title: 'BadministAPI'
+  description: 'BadministアプリのAPI'
+  version: '1.0.0'
+
+servers:
+  - url: 'http://localhost:8080'
+    description: 'ローカル環境'
+
+tags:
+  - name: 'users'
+    description: 'ユーザーの操作'
+  - name: 'communities'
+    description: 'コミュニティの操作'
+
+components:
+  requestBodies:
+    article:
+      description: A JSON object containing article information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/article'
+  parameters:
+    userId:
+      name: X-User-ID
+      in: header
+      description: user id
+      required: true
+      schema:
+        type: integer
+    articleId:
+      name: articleId
+      in: path
+      description: article id
+      required: true
+      schema:
+        type: integer
+  responses:
+    success:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/success'
+    notFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/notFoundError'
+  schemas:
+    community:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    communityList:
+      type: object
+      properties:
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/community'
+    player:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        gender:
+          type: string
+        age:
+          type: integer
+        level:
+          type: string
+        num_games:
+          type: integer
+        status:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    playerList:
+      type: object
+      properties:
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/player'
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    success:
+      type: object
+      properties:
+        message:
+          type: string
+    notFound:
+      type: object
+      properties:
+        message:
+          type: string
+
+paths:
+  /communities/{community-id}:
+    get:
+      summary: 'コミュニティ一覧の取得'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - name: community-id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ID'
+      responses:
+        '200':
+          description: '成功'

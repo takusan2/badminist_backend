@@ -3,10 +3,16 @@ package main
 import (
 	"github.com/joho/godotenv"
 	"github.com/takuya-okada-01/badminist/api/infrastructure/database"
-	"github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller"
-	"github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/dao"
-	"github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/repository"
-	"github.com/takuya-okada-01/badminist/api/processor"
+
+	command_controller "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller/command"
+	query_controller "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller/query"
+	command_dao "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/dao/command"
+	query_dao "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/dao/query"
+
+	command_repository "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/repository/command"
+	command_processor "github.com/takuya-okada-01/badminist/api/processor/command"
+	query_processor "github.com/takuya-okada-01/badminist/api/processor/query"
+
 	"github.com/takuya-okada-01/badminist/api/router"
 )
 
@@ -15,17 +21,21 @@ func main() {
 	db := database.Connect()
 	defer database.CloseDB(db)
 
-	communityDao := dao.NewCommunityDaoImpl()
-	userDao := dao.NewUserDaoImpl()
+	communityDao := command_dao.NewCommunityDaoImpl()
+	userDao := command_dao.NewUserDaoImpl()
 
-	communityRepo := repository.NewCommunityRepositoryImpl(db, communityDao)
-	userRepo := repository.NewUserRepositoryImpl(db, userDao)
+	queryCommunityDao := query_dao.NewCommunityDaoImpl()
+	queryUserDao := query_dao.NewUserDaoImpl()
 
-	commandProcessor := processor.NewCommandProcessor(communityRepo, userRepo)
-	queryProcessor := processor.NewQueryProcessor(db, communityDao)
+	commandCommunityRepo := command_repository.NewCommunityRepositoryImpl(db, communityDao)
+	commandUserRepo := command_repository.NewUserRepositoryImpl(db, userDao)
 
-	controller := controller.NewController(commandProcessor, queryProcessor)
+	commandProcessor := command_processor.NewCommandProcessor(commandCommunityRepo, commandUserRepo)
+	queryProcessor := query_processor.NewQueryProcessor(db, queryCommunityDao, queryUserDao)
 
-	router := router.NewRouter(controller)
+	commandController := command_controller.NewController(commandProcessor, queryProcessor)
+	queryController := query_controller.NewController(queryProcessor)
+
+	router := router.NewRouter(commandController, queryController)
 	router.Logger.Fatal(router.Start(":8080"))
 }

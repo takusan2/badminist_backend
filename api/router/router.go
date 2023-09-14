@@ -5,14 +5,19 @@ import (
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
-	"github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller"
+	command_controller "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller/command"
+	query_controller "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller/query"
 )
 
 type Router struct {
-	controller controller.Controller
+	commandController command_controller.Controller
+	query_controller  query_controller.Controller
 }
 
-func NewRouter(controller controller.Controller) *echo.Echo {
+func NewRouter(
+	commandController command_controller.Controller,
+	query_controller query_controller.Controller,
+) *echo.Echo {
 	e := echo.New()
 
 	ec := e.Group("/communities")
@@ -25,38 +30,35 @@ func NewRouter(controller controller.Controller) *echo.Echo {
 	)
 	{
 		// Community
-		ec.POST("/create-community", controller.CreateCommunity)
-		ec.PUT("/rename-community", controller.RenameCommunity)
-		ec.PUT("/edit-community-description", controller.EditCommunityDescription)
-		ec.DELETE("/delete-community", controller.DeleteCommunity)
+		ec.GET("", query_controller.GetCommunityList)
+		ec.POST("/create-community", commandController.CreateCommunity)
+		ec.PUT("/rename-community", commandController.RenameCommunity)
+		ec.PUT("/edit-community-description", commandController.EditCommunityDescription)
+		ec.DELETE("/delete-community", commandController.DeleteCommunity)
 
 		// Player
-		ec.POST("/add-player", controller.AddPlayer)
-		ec.DELETE("/remove-player", controller.RemovePlayer)
-		ec.PUT("/change-player-property", controller.ChangePlayerProperty)
-		ec.PUT("/reset-player-num-games", controller.ResetPlayerNumGames)
+		ec.GET("/:community-id/players", query_controller.GetPlayerList)
+		ec.POST("/add-player", commandController.AddPlayer)
+		ec.PUT("/change-player-property", commandController.ChangePlayerProperty)
+		ec.PUT("/reset-player-num-games", commandController.ResetPlayerNumGames)
+		ec.DELETE("/remove-player", commandController.RemovePlayer)
 
 		// Member
-		ec.POST("/add-member", controller.AddMember)
-		ec.DELETE("/remove-member", controller.RemoveMember)
-		ec.PUT("/change-member-role", controller.ChangeMemberRole)
+		ec.GET("/:community-id/members", query_controller.GetMemberList)
+		ec.POST("/add-member", commandController.AddMember)
+		ec.PUT("/change-member-role", commandController.ChangeMemberRole)
+		ec.DELETE("/remove-member", commandController.RemoveMember)
+
+		// Match
+		ec.GET("/:community-id/matches", query_controller.GenerateMatchCombination)
 	}
 
-	eu := e.Group("/users")
+	eu := e.Group("/auth")
 	{
-		eu.POST("/temporary-registration", controller.TemporaryRegistration)
-		eu.POST("/activate-user", controller.ActivateUser)
-		eu.POST("/login", controller.Login)
+		eu.POST("/temporary-registration", commandController.TemporaryRegistration)
+		eu.POST("/activate-user", commandController.ActivateUser)
+		eu.POST("/login", commandController.Login)
 	}
 
-	// Query
-	em := e.Group("/mathces")
-	{
-		em.GET("/generate-match-combination/:community-id/:num-court/:rule", controller.GenerateMatchCombination)
-	}
-
-	{
-		ec.GET("", controller.GetCommunityList)
-	}
 	return e
 }

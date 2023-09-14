@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["badminist", "godotenv", "gorm", "joho"]
+  "cSpell.words": [
+    "badminist",
+    "echojwt",
+    "godotenv",
+    "gorm",
+    "joho",
+    "labstack",
+    "readmodel"
+  ]
 }

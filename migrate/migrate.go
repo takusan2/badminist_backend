@@ -5,7 +5,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/takuya-okada-01/badminist/api/infrastructure/database"
-	"github.com/takuya-okada-01/badminist/api/infrastructure/entity"
+	"github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/entity"
 )
 
 func main() {
