@@ -10,13 +10,35 @@ servers:
     description: 'ローカル環境'
 
 tags:
+  - name: 'auth'
+    description: '認証'
   - name: 'users'
     description: 'ユーザーの操作'
   - name: 'communities'
     description: 'コミュニティの操作'
 
 components:
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   requestBodies:
+    temporaryRegistration:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/temporaryRegistration'
+    activateUser:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/activateUser'
+    login:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/login'
     createCommunity:
       content:
         application/json:
@@ -83,13 +105,13 @@ components:
       in: path
       required: true
       schema:
-        type: integer
+        $ref: '#/components/schemas/communityId'
     user-id:
       name: user-id
       in: path
       required: true
       schema:
-        type: integer
+        $ref: '#/components/schemas/userId'
     num-court:
       name: num-court
       in: query
@@ -101,7 +123,7 @@ components:
       in: query
       required: true
       schema:
-        type: string
+        $ref: '#/components/schemas/rule'
   responses:
     success:
       description: Success
@@ -110,13 +132,36 @@ components:
           schema:
             $ref: '#/components/schemas/success'
   schemas:
+    temporaryRegistration:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/userName'
+        email:
+          $ref: '#/components/schemas/userEmail'
+        password:
+          $ref: '#/components/schemas/userPassword'
+    activateUser:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/userEmail'
+        confirmPass:
+          $ref: '#/components/schemas/userConfirmPass'
+    login:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/userEmail'
+        password:
+          $ref: '#/components/schemas/userPassword'
     createCommunity:
       type: object
       properties:
         name:
-          type: string
+          $ref: '#/components/schemas/communityName'
         description:
-          type: string
+          $ref: '#/components/schemas/communityDescription'
     renameCommunity:
       type: object
       properties:
@@ -125,129 +170,131 @@ components:
     editCommunityDescription:
       type: object
       properties:
+        community_id:
+          $ref: '#/components/schemas/communityId'
         description:
           type: string
     deleteCommunity:
       type: object
       properties:
         community_id:
-          type: string
+          $ref: '#/components/schemas/communityId'
     addPlayer:
       type: object
       properties:
         name:
-          type: string
+          $ref: '#/components/schemas/playerName'
         gender:
-          type: string
+          $ref: '#/components/schemas/playerGender'
         age:
-          type: integer
+          $ref: '#/components/schemas/playerAge'
         level:
-          type: string
+          $ref: '#/components/schemas/playerLevel'
         num_games:
-          type: integer
+          $ref: '#/components/schemas/playerNumGames'
         status:
-          type: string
+          $ref: '#/components/schemas/playerStatus'
     removePlayer:
       type: object
       properties:
         community_id:
-          type: string
+          $ref: '#/components/schemas/communityId'
         player_id:
-          type: string
+          $ref: '#/components/schemas/playerId'
     changePlayerProperty:
       type: object
       properties:
         community_id:
-          type: string
+          $ref: '#/components/schemas/communityId'
         player_id:
-          type: string
+          $ref: '#/components/schemas/playerId'
         name:
-          type: string
+          $ref: '#/components/schemas/playerName'
         gender:
-          type: string
+          $ref: '#/components/schemas/playerGender'
         age:
-          type: integer
+          $ref: '#/components/schemas/playerAge'
         level:
-          type: string
+          $ref: '#/components/schemas/playerLevel'
         num_games:
-          type: integer
+          $ref: '#/components/schemas/playerNumGames'
         status:
-          type: string
+          $ref: '#/components/schemas/playerStatus'
     resetPlayerNumGames:
       type: object
       properties:
         community_id:
-          type: string
+          $ref: '#/components/schemas/communityId'
         player_id:
-          type: string
+          $ref: '#/components/schemas/playerId'
     changePlayerNumGames:
       type: object
       properties:
         community_id:
-          type: string
+          $ref: '#/components/schemas/communityId'
         player_id:
-          type: string
+          $ref: '#/components/schemas/playerId'
         num_games:
-          type: integer
+          $ref: '#/components/schemas/playerNumGames'
     addMember:
       type: object
       properties:
         community_id:
-          type: string
+          $ref: '#/components/schemas/communityId'
         user_id:
-          type: string
+          $ref: '#/components/schemas/userId'
         role:
-          type: string
+          $ref: '#/components/schemas/role'
     removeMember:
       type: object
       properties:
         community_id:
-          type: string
+          $ref: '#/components/schemas/communityId'
         user_id:
-          type: string
+          $ref: '#/components/schemas/userId'
     changeMemberRole:
       type: object
       properties:
         community_id:
-          type: string
+          $ref: '#/components/schemas/communityId'
         user_id:
-          type: string
+          $ref: '#/components/schemas/userId'
         role:
-          type: string
+          $ref: '#/components/schemas/role'
     userReadModel:
       type: object
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/userId'
         name:
-          type: string
+          $ref: '#/components/schemas/userName'
         email:
-          type: string
+          $ref: '#/components/schemas/userEmail'
         created_at:
-          type: string
+          $ref: '#/components/schemas/createdAt'
         updated_at:
-          type: string
+          $ref: '#/components/schemas/updatedAt'
     playerReadModel:
       type: object
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/playerId'
         name:
-          type: string
+          $ref: '#/components/schemas/playerName'
         gender:
-          type: string
+          $ref: '#/components/schemas/playerGender'
         age:
-          type: integer
+          $ref: '#/components/schemas/playerAge'
         level:
-          type: string
+          $ref: '#/components/schemas/playerLevel'
         num_games:
-          type: integer
+          $ref: '#/components/schemas/playerNumGames'
         status:
-          type: string
+          $ref: '#/components/schemas/playerStatus'
         created_at:
-          type: string
+          $ref: '#/components/schemas/createdAt'
         updated_at:
-          type: string
+          $ref: '#/components/schemas/updatedAt'
     playerList:
       type: object
       properties:
@@ -259,11 +306,11 @@ components:
       type: object
       properties:
         member_id:
-          type: integer
+          $ref: '#/components/schemas/memberId'
         user:
           $ref: '#/components/schemas/userReadModel'
         role:
-          type: string
+          $ref: '#/components/schemas/role'
     memberList:
       type: object
       properties:
@@ -275,15 +322,15 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/communityId'
         name:
-          type: string
+          $ref: '#/components/schemas/communityName'
         description:
-          type: string
+          $ref: '#/components/schemas/communityDescription'
         created_at:
-          type: string
+          $ref: '#/components/schemas/createdAt'
         updated_at:
-          type: string
+          $ref: '#/components/schemas/updatedAt'
     communityList:
       type: object
       properties:
@@ -322,13 +369,125 @@ components:
       properties:
         message:
           type: string
+    token:
+      type: object
+      properties:
+        token:
+          type: string
+    communityId:
+      type: string
+    communityName:
+      type: string
+    communityDescription:
+      type: string
+    playerId:
+      type: string
+    playerName:
+      type: string
+    playerGender:
+      type: string
+      enum: [male, female, unknown]
+    playerAge:
+      type: integer
+    playerLevel:
+      type: string
+      enum: [beginner, intermediate, advanced]
+    playerNumGames:
+      type: integer
+    playerStatus:
+      type: string
+      enum: [attend, break, absence]
+    memberId:
+      type: string
+    role:
+      type: string
+      enum: [admin, staff, member]
+    userId:
+      type: string
+    userName:
+      type: string
+    userEmail:
+      type: string
+    userPassword:
+      type: string
+    userConfirmPass:
+      type: string
+    createdAt:
+      type: string
+    updatedAt:
+      type: string
+    rule:
+      type: string
+      enum: [singles, doubles]
 
 paths:
+  /auth/temporary-registration:
+    post:
+      summary: '仮登録'
+      tags: ['auth']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/temporaryRegistration'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '400':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /auth/activate-user:
+    post:
+      summary: '本登録'
+      tags: ['auth']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/activateUser'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userReadModel'
+        '400':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /auth/login:
+    post:
+      summary: 'ログイン'
+      tags: ['auth']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
   /communities/create-community:
     post:
       summary: 'コミュニティの作成'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/createCommunity'
       responses:
@@ -349,6 +508,8 @@ paths:
       summary: 'コミュニティ名の変更'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/renameCommunity'
       responses:
@@ -369,6 +530,8 @@ paths:
       summary: 'コミュニティの説明文の変更'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/editCommunityDescription'
       responses:
@@ -389,6 +552,8 @@ paths:
       summary: 'コミュニティの削除'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/deleteCommunity'
       responses:
@@ -410,6 +575,8 @@ paths:
       summary: 'コミュニティにプレイヤーを追加'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/addPlayer'
       responses:
@@ -430,6 +597,8 @@ paths:
       summary: 'コミュニティからプレイヤーを削除'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/removePlayer'
       responses:
@@ -450,6 +619,8 @@ paths:
       summary: 'プレイヤーのプロパティを変更'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/changePlayerProperty'
       responses:
@@ -470,6 +641,8 @@ paths:
       summary: 'プレイヤーの試合数をリセット'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/resetPlayerNumGames'
       responses:
@@ -490,6 +663,8 @@ paths:
       summary: 'プレイヤーの試合数を変更'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/changePlayerNumGames'
       responses:
@@ -510,6 +685,8 @@ paths:
       summary: 'コミュニティにメンバーを追加'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/community-id'
       requestBody:
@@ -532,6 +709,8 @@ paths:
       summary: 'コミュニティからメンバーを削除'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/community-id'
       requestBody:
@@ -554,6 +733,8 @@ paths:
       summary: 'メンバーの権限を変更'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/community-id'
       requestBody:
@@ -576,6 +757,8 @@ paths:
       summary: 'コミュニティ一覧の取得'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/community-id'
       responses:
@@ -596,6 +779,8 @@ paths:
       summary: 'プレイヤー一覧の取得'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/community-id'
       responses:
@@ -616,6 +801,8 @@ paths:
       summary: 'メンバー一覧の取得'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/community-id'
       responses:
@@ -636,6 +823,8 @@ paths:
       summary: 'マッチの生成'
       tags: ['communities']
       deprecated: false
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/community-id'
         - $ref: '#/components/parameters/num-court'
@@ -658,6 +847,8 @@ paths:
       summary: 'ユーザーの取得'
       tags: ['users']
       deprecated: false
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/user-id'
       responses:
