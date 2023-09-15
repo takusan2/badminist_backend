@@ -169,12 +169,7 @@ func (q *queryProcessor) GetCommunityList(
 
 	var communityList read_model.CommunityList
 	for _, c := range communityEntity {
-		community := read_model.NewCommunity(
-			c.Id,
-			c.Name,
-			c.Description,
-		)
-		communityList = append(communityList, community)
+		communityList = append(communityList, c.ToReadModel())
 	}
 	return communityList, nil
 }
@@ -189,16 +184,7 @@ func (q *queryProcessor) GetPlayerList(
 
 	var playerList read_model.PlayerList
 	for _, p := range players {
-		player := read_model.NewPlayer(
-			p.Id,
-			p.Name,
-			p.Gender,
-			p.Age,
-			p.Level,
-			p.NumGames,
-			p.Status,
-		)
-		playerList = append(playerList, player)
+		playerList = append(playerList, p.ToReadModel())
 	}
 	return playerList, nil
 }
@@ -213,17 +199,7 @@ func (q *queryProcessor) GetMemberList(
 
 	var memberList read_model.MemberList
 	for _, m := range members {
-		user := read_model.NewUser(
-			m.User.Id,
-			m.User.Name,
-			m.User.Email,
-		)
-		member := read_model.NewMember(
-			m.Id,
-			user,
-			m.Role,
-		)
-		memberList = append(memberList, member)
+		memberList = append(memberList, m.ToReadModel())
 	}
 	return memberList, nil
 }
@@ -235,9 +211,5 @@ func (q *queryProcessor) FindUserById(
 	if err != nil {
 		return read_model.User{}, err
 	}
-	return read_model.NewUser(
-		user.Id,
-		user.Name,
-		user.Email,
-	), nil
+	return user.ToReadModel(), nil
 }

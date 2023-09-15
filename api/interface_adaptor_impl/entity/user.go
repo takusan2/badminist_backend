@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/takuya-okada-01/badminist/api/domain/user"
+	"github.com/takuya-okada-01/badminist/api/processor/query/read_model"
 )
 
 type User struct {
@@ -74,4 +75,12 @@ func (u *User) ToDomainObject() user.User {
 		confirmPass,
 		status,
 	)
+}
+
+func (u *User) ToReadModel() read_model.User {
+	return read_model.User{
+		Id:    u.Id,
+		Name:  u.Name,
+		Email: u.Email,
+	}
 }

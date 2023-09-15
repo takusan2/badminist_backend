@@ -76,6 +76,12 @@ type CommandProcessor interface {
 		playerStatus player.PlayerStatus,
 		executorId user.UserId,
 	) error
+	ChangePlayerNumGames(
+		communityId community.CommunityId,
+		playerId player.PlayerId,
+		numGames player.PlayerNumGames,
+		executorId user.UserId,
+	) error
 	ResetPlayerNumGames(
 		communityId community.CommunityId,
 		playerId player.PlayerId,
@@ -419,9 +425,39 @@ func (c *commandProcessor) ResetPlayerNumGames(
 		return err
 	}
 
-	if err := c.communityRepo.ResetPlayerNumGames(
+	if err := c.communityRepo.ChangePlayerNumGames(
 		event.CommunityId,
 		event.PlayerId,
+		event.NumGames,
+	); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *commandProcessor) ChangePlayerNumGames(
+	communityId community.CommunityId,
+	playerId player.PlayerId,
+	numGames player.PlayerNumGames,
+	executorId user.UserId,
+) error {
+	community, err := c.communityRepo.FindCommunityById(communityId)
+	if err != nil {
+		return err
+	}
+	event, err := community.ChangePlayerNumGames(
+		playerId,
+		numGames,
+		executorId,
+	)
+	if err != nil {
+		return err
+	}
+
+	if err := c.communityRepo.ChangePlayerNumGames(
+		event.CommunityId,
+		event.PlayerId,
+		event.NumGames,
 	); err != nil {
 		return err
 	}

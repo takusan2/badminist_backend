@@ -5,6 +5,7 @@ import (
 
 	"github.com/takuya-okada-01/badminist/api/domain/community/member"
 	"github.com/takuya-okada-01/badminist/api/domain/user"
+	"github.com/takuya-okada-01/badminist/api/processor/query/read_model"
 )
 
 type Member struct {
@@ -49,4 +50,12 @@ func (m *Member) ToDomainObject() member.Member {
 	}
 
 	return member.NewMember(memberId, role, userId)
+}
+
+func (m *Member) ToReadModel() read_model.Member {
+	return read_model.Member{
+		ID:   m.Id,
+		User: m.User.ToReadModel(),
+		Role: m.Role,
+	}
 }

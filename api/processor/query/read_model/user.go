@@ -1,7 +1,7 @@
 package read_model
 
 type User struct {
-	ID    string `json:"id"`
+	Id    string `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
@@ -12,7 +12,7 @@ func NewUser(
 	email string,
 ) User {
 	return User{
-		ID:    id,
+		Id:    id,
 		Name:  name,
 		Email: email,
 	}

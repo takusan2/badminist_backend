@@ -27,13 +27,30 @@ func NewCommunityRepositoryImpl(
 	}
 }
 
-// ResetPlayerNumGames implements repository_if.CommunityRepository.
-func (c *communityRepositoryImpl) ResetPlayerNumGames(communityId community.CommunityId, playerId player.PlayerId) error {
+func (c *communityRepositoryImpl) ChangePlayerNumGames(
+	communityId community.CommunityId,
+	playerId player.PlayerId,
+	playerNumGames player.PlayerNumGames,
+) error {
 	if err := c.dao.UpdatePlayerNumGames(
 		c.db,
 		communityId,
 		playerId,
-		0,
+		playerNumGames,
+	); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ResetPlayerNumGames implements repository_if.CommunityRepository.
+func (c *communityRepositoryImpl) ResetPlayerNumGames(communityId community.CommunityId, playerId player.PlayerId) error {
+	num, _ := player.NewPlayerNumGames(0)
+	if err := c.dao.UpdatePlayerNumGames(
+		c.db,
+		communityId,
+		playerId,
+		num,
 	); err != nil {
 		return err
 	}
@@ -57,14 +74,14 @@ func (c *communityRepositoryImpl) AddMember(memberId member.MemberId, communityI
 }
 
 // AddPlayer implements repository_if.CommunityRepository.
-func (c *communityRepositoryImpl) AddPlayer(communityId community.CommunityId, playerId player.PlayerId, playerName player.PlayerName, plyaerGender player.PlayerGender, playerAge player.PlayerAge, playerLevel player.PlayerLevel, playerNumGames player.PlayerNumGames, playerStatus player.PlayerStatus) error {
+func (c *communityRepositoryImpl) AddPlayer(communityId community.CommunityId, playerId player.PlayerId, playerName player.PlayerName, playerGender player.PlayerGender, playerAge player.PlayerAge, playerLevel player.PlayerLevel, playerNumGames player.PlayerNumGames, playerStatus player.PlayerStatus) error {
 	if err := c.dao.InsertPlayer(
 		c.db,
 		entity.NewPlayer(
 			playerId.Value(),
 			communityId.Value(),
 			playerName.Value(),
-			plyaerGender.Value(),
+			playerGender.Value(),
 			playerAge.Value(),
 			playerLevel.Value(),
 			playerNumGames.Value(),
@@ -90,13 +107,13 @@ func (c *communityRepositoryImpl) ChangeMemberRole(communityId community.Communi
 }
 
 // ChangePlayerProperty implements repository_if.CommunityRepository.
-func (c *communityRepositoryImpl) ChangePlayerProperty(communityId community.CommunityId, playerId player.PlayerId, playerName player.PlayerName, plyaerGender player.PlayerGender, playerAge player.PlayerAge, playerLevel player.PlayerLevel, playerNumGames player.PlayerNumGames, playerStatus player.PlayerStatus) error {
+func (c *communityRepositoryImpl) ChangePlayerProperty(communityId community.CommunityId, playerId player.PlayerId, playerName player.PlayerName, playerGender player.PlayerGender, playerAge player.PlayerAge, playerLevel player.PlayerLevel, playerNumGames player.PlayerNumGames, playerStatus player.PlayerStatus) error {
 	if err := c.dao.UpdatePlayer(
 		c.db,
 		communityId,
 		playerId,
 		playerName,
-		plyaerGender,
+		playerGender,
 		playerAge,
 		playerLevel,
 		playerNumGames,
@@ -130,7 +147,10 @@ func (c *communityRepositoryImpl) RenameCommunity(communityId community.Communit
 }
 
 // EditCommunityDescription implements repository_if.CommunityRepository.
-func (c *communityRepositoryImpl) EditCommunityDescription(communityId community.CommunityId, communityName community.CommunityName, communityDescription community.CommunityDescription) error {
+func (c *communityRepositoryImpl) EditCommunityDescription(
+	communityId community.CommunityId,
+	communityName community.CommunityName,
+	communityDescription community.CommunityDescription) error {
 	if err := c.dao.UpdateCommunityDescription(
 		c.db,
 		communityId,

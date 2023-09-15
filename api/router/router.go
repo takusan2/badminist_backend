@@ -50,7 +50,7 @@ func NewRouter(
 		ec.DELETE("/remove-member", commandController.RemoveMember)
 
 		// Match
-		ec.GET("/:community-id/matches", query_controller.GenerateMatchCombination)
+		ec.GET("/:community-id/generate-matches", query_controller.GenerateMatchCombination)
 	}
 
 	eu := e.Group("/auth")
