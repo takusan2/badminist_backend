@@ -28,6 +28,7 @@ func NewRouter(
 			TokenLookup: "header:Authorization:Bearer ",
 		}),
 	)
+
 	{
 		// Community
 		ec.GET("", query_controller.GetCommunityList)
@@ -53,11 +54,16 @@ func NewRouter(
 		ec.GET("/:community-id/generate-matches", query_controller.GenerateMatchCombination)
 	}
 
-	eu := e.Group("/auth")
+	ea := e.Group("/auth")
 	{
-		eu.POST("/temporary-registration", commandController.TemporaryRegistration)
-		eu.POST("/activate-user", commandController.ActivateUser)
-		eu.POST("/login", commandController.Login)
+		ea.POST("/temporary-registration", commandController.TemporaryRegistration)
+		ea.POST("/activate-user", commandController.ActivateUser)
+		ea.POST("/login", commandController.Login)
+	}
+
+	eu := e.Group("/users")
+	{
+		eu.GET("/:user-id", query_controller.GetUser)
 	}
 
 	return e

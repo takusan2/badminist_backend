@@ -15,6 +15,7 @@ type Controller interface {
 	GetCommunityList(ctx echo.Context) error
 	GetPlayerList(ctx echo.Context) error
 	GetMemberList(ctx echo.Context) error
+	GetUser(ctx echo.Context) error
 }
 
 type controller struct {
@@ -97,4 +98,19 @@ func (c *controller) GetMemberList(ctx echo.Context) error {
 		return ctx.JSON(400, err.Error())
 	}
 	return ctx.JSON(200, memberList)
+}
+
+func (c *controller) GetUser(ctx echo.Context) error {
+	paramUserId := ctx.Param("user-id")
+	userId, err := user.UserIdFromStr(paramUserId)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	user, err := c.processor.FindUserById(
+		userId,
+	)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	return ctx.JSON(200, user)
 }
