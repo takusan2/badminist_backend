@@ -42,6 +42,7 @@ func NewRouter(
 		ec.POST("/add-player", commandController.AddPlayer)
 		ec.PUT("/change-player-property", commandController.ChangePlayerProperty)
 		ec.PUT("/reset-player-num-games", commandController.ResetPlayerNumGames)
+		ec.PUT("/change-player-num-games", commandController.ChangePlayerNumGames)
 		ec.DELETE("/remove-player", commandController.RemovePlayer)
 
 		// Member

@@ -22,6 +22,7 @@ type Controller interface {
 	RemovePlayer(ctx echo.Context) error
 	ChangePlayerProperty(ctx echo.Context) error
 	ResetPlayerNumGames(ctx echo.Context) error
+	ChangePlayerNumGames(ctx echo.Context) error
 	AddMember(ctx echo.Context) error
 	RemoveMember(ctx echo.Context) error
 	ChangeMemberRole(ctx echo.Context) error
@@ -370,6 +371,42 @@ func (c *controller) ResetPlayerNumGames(
 		return ctx.JSON(400, err.Error())
 	}
 	return ctx.JSON(200, map[string]any{"message": "success"})
+}
+
+func (c *controller) ChangePlayerNumGames(
+	ctx echo.Context,
+) error {
+	var request command_dto.ChangePlayerNumGamesRequestBody
+	if err := ctx.Bind(&request); err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	communityId, err := community.CommunityIdFromStr(request.CommunityId)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	playerId, err := player.PlayerIdFromStr(request.PlayerId)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	playerNumGames, err := player.NewPlayerNumGames(request.NumGames)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	executor := auth.GetCurrentUser(ctx)
+	executorId, err := user.UserIdFromStr(executor)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	if err := c.commandProcessor.ChangePlayerNumGames(
+		communityId,
+		playerId,
+		playerNumGames,
+		executorId,
+	); err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	return ctx.JSON(200, map[string]any{"message": "success"})
+
 }
 
 func (c *controller) AddMember(

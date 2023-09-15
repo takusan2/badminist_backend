@@ -49,6 +49,12 @@ type ResetPlayerNumGamesRequestBody struct {
 	PlayerId    string `json:"player_id"`
 }
 
+type ChangePlayerNumGamesRequestBody struct {
+	CommunityId string `json:"community_id"`
+	PlayerId    string `json:"player_id"`
+	NumGames    int    `json:"num_games"`
+}
+
 type AddMemberRequestBody struct {
 	CommunityId string `json:"community_id"`
 	UserId      string `json:"user_id"`
