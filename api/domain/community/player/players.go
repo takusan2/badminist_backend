@@ -18,9 +18,9 @@ func (p *Players) AddPlayer(player Player) {
 	p.value = append(p.value, player)
 }
 
-func (p *Players) RemovePlayer(remoevPlayerId PlayerId) {
+func (p *Players) RemovePlayer(removePlayerId PlayerId) {
 	for i, player := range p.value {
-		if player.id == remoevPlayerId {
+		if player.id == removePlayerId {
 			p.value = append(p.value[:i], p.value[i+1:]...)
 		}
 	}
@@ -51,9 +51,26 @@ func (p *Players) ResetPlayerNumGames(playerId PlayerId) {
 	}
 }
 
+func (p *Players) ChangePlayerNumGames(playerId PlayerId, numGames PlayerNumGames) {
+	for i, player := range p.value {
+		if player.id == playerId {
+			p.value[i].ChangeNumGames(numGames)
+		}
+	}
+}
+
 func (p *Players) GetPlayer(playerId PlayerId) Player {
 	for _, player := range p.value {
 		if player.id == playerId {
+			return player
+		}
+	}
+	return Player{}
+}
+
+func (p *Players) GetPlayerByName(playerName PlayerName) Player {
+	for _, player := range p.value {
+		if player.name == playerName {
 			return player
 		}
 	}

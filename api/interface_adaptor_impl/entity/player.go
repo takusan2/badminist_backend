@@ -98,5 +98,7 @@ func (p *Player) ToReadModel() read_model.Player {
 		p.Level,
 		p.NumGames,
 		p.Status,
+		p.CreatedAt,
+		p.UpdatedAt,
 	)
 }

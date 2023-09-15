@@ -84,5 +84,13 @@ type CommunityEventChangePlayerPropertyBody struct {
 type CommunityEventResetNumGamesBody struct {
 	CommunityId CommunityId
 	PlayerId    player.PlayerId
+	NumGames    player.PlayerNumGames
+	OccurredAt  time.Time
+}
+
+type CommunityEventChangeNumGamesBody struct {
+	CommunityId CommunityId
+	PlayerId    player.PlayerId
+	NumGames    player.PlayerNumGames
 	OccurredAt  time.Time
 }

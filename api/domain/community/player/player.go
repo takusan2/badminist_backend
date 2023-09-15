@@ -83,3 +83,7 @@ func (p *Player) ChangePlayerProperty(player Player) {
 func (p *Player) ResetNumGames() {
 	p.numGames.Reset()
 }
+
+func (p *Player) ChangeNumGames(numGames PlayerNumGames) {
+	p.numGames = numGames
+}

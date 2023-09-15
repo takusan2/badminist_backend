@@ -68,7 +68,7 @@ type CommunityDao interface {
 		db *gorm.DB,
 		communityId community.CommunityId,
 		playerId player.PlayerId,
-		num int,
+		num player.PlayerNumGames,
 	) error
 
 	// Member
@@ -99,11 +99,4 @@ type CommunityDao interface {
 		communityId community.CommunityId,
 		userId user.UserId,
 	) error
-
-	// Query
-	FindPlayersWithStatusByCommunityId(
-		db *gorm.DB,
-		communityId community.CommunityId,
-		status player.PlayerStatus,
-	) ([]entity.Player, error)
 }

@@ -15,8 +15,8 @@ func NewPlayerNumGames(numGames int) (PlayerNumGames, error) {
 	return PlayerNumGames{value: numGames}, nil
 }
 
-func (p *PlayerNumGames) Increment() {
-	p.value++
+func (p *PlayerNumGames) Change(num PlayerNumGames) {
+	p.value = num.value
 }
 
 func (p *PlayerNumGames) Reset() {

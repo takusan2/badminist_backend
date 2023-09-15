@@ -2,6 +2,8 @@ package entity
 
 import (
 	"time"
+
+	"github.com/takuya-okada-01/badminist/api/processor/query/read_model"
 )
 
 type Community struct {
@@ -21,5 +23,15 @@ func NewCommunity(
 		Id:          id,
 		Name:        name,
 		Description: description,
+	}
+}
+
+func (c *Community) ToReadModel() read_model.Community {
+	return read_model.Community{
+		ID:          c.Id,
+		Name:        c.Name,
+		Description: c.Description,
+		CreatedAt:   c.CreatedAt,
+		UpdatedAt:   c.UpdatedAt,
 	}
 }

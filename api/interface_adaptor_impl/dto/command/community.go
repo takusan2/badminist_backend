@@ -20,12 +20,12 @@ type DeleteCommunityRequestBody struct {
 
 type AddPlayerRequestBody struct {
 	CommunityId    string `json:"community_id"`
-	PlayerName     string `json:"player_name"`
-	PlayerGender   string `json:"player_gender"`
-	PlayerAge      int    `json:"player_age"`
-	PlayerLevel    string `json:"player_level"`
-	PlayerNumGames int    `json:"player_num_games"`
-	PlayerStatus   string `json:"player_status"`
+	PlayerName     string `json:"name"`
+	PlayerGender   string `json:"gender"`
+	PlayerAge      int    `json:"age"`
+	PlayerLevel    string `json:"level"`
+	PlayerNumGames int    `json:"num_games"`
+	PlayerStatus   string `json:"status"`
 }
 
 type RemovePlayerRequestBody struct {
@@ -36,13 +36,12 @@ type RemovePlayerRequestBody struct {
 type ChangePlayerPropertyRequestBody struct {
 	CommunityId    string `json:"community_id"`
 	PlayerId       string `json:"player_id"`
-	PlayerName     string `json:"player_name"`
-	PlayerGender   string `json:"player_gender"`
-	PlayerAge      int    `json:"player_age"`
-	PlayerLevel    string `json:"player_level"`
-	PlayerNumGames int    `json:"player_num_games"`
-	PlayerStatus   string `json:"player_status"`
-	ExecutorId     string `json:"executor_id"`
+	PlayerName     string `json:"name"`
+	PlayerGender   string `json:"gender"`
+	PlayerAge      int    `json:"age"`
+	PlayerLevel    string `json:"level"`
+	PlayerNumGames int    `json:"num_games"`
+	PlayerStatus   string `json:"status"`
 }
 
 type ResetPlayerNumGamesRequestBody struct {
@@ -53,7 +52,7 @@ type ResetPlayerNumGamesRequestBody struct {
 type AddMemberRequestBody struct {
 	CommunityId string `json:"community_id"`
 	UserId      string `json:"user_id"`
-	MemberRole  string `json:"member_role"`
+	MemberRole  string `json:"role"`
 }
 
 type RemoveMemberRequestBody struct {
@@ -64,11 +63,5 @@ type RemoveMemberRequestBody struct {
 type ChangeMemberRoleRequestBody struct {
 	CommunityId string `json:"community_id"`
 	UserId      string `json:"user_id"`
-	MemberRole  string `json:"member_role"`
-}
-
-type GenerateMatchCombinationRequestBody struct {
-	CommunityId string `json:"community_id"`
-	NumCourt    int    `json:"num_court"`
-	Rule        string `json:"rule"`
+	MemberRole  string `json:"role"`
 }

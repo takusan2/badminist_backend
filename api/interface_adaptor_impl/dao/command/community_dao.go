@@ -291,7 +291,7 @@ func (*CommunityDaoImpl) UpdatePlayerNumGames(
 	db *gorm.DB,
 	communityId community.CommunityId,
 	playerId player.PlayerId,
-	num int,
+	num player.PlayerNumGames,
 ) error {
 	if err := db.Model(&entity.Player{}).
 		Where(
@@ -301,7 +301,7 @@ func (*CommunityDaoImpl) UpdatePlayerNumGames(
 		).
 		Update(
 			"num_games",
-			num,
+			num.Value(),
 		).Error; err != nil {
 		return err
 	}

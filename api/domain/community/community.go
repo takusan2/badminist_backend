@@ -284,7 +284,45 @@ func (c *Community) ResetPlayerNumGames(
 		return CommunityEventResetNumGamesBody{}, fmt.Errorf("player is not player")
 	}
 	c.players.ResetPlayerNumGames(playerId)
+	numGames, _ := player.NewPlayerNumGames(0)
 	return CommunityEventResetNumGamesBody{
+		CommunityId: c.id,
+		PlayerId:    playerId,
+		NumGames:    numGames,
+		OccurredAt:  time.Now(),
+	}, nil
+}
+
+// コミュニティのプレイヤーの試合数を変更する
+//
+// # 引数
+//
+//   - playerId: 変更するプレイヤーのId
+//   - num: 変更後の試合数
+//   - executorId: 実行者のユーザーId
+//
+// # 戻り値
+//
+//   - 実行者がコミュニティのメンバーでない場合はエラー
+//   - 実行者がコミュニティのスタッフでない場合はエラー
+//   - 変更するプレイヤーが存在しない場合はエラー
+func (c *Community) ChangePlayerNumGames(
+	playerId player.PlayerId,
+	num player.PlayerNumGames,
+	executorId user.UserId,
+) (CommunityEventChangeNumGamesBody, error) {
+	if !c.members.IsMember(executorId) {
+		return CommunityEventChangeNumGamesBody{}, fmt.Errorf("executor is not member")
+	}
+	if !c.members.IsStaff(executorId) {
+		return CommunityEventChangeNumGamesBody{}, fmt.Errorf("executor is not staff")
+	}
+	if !c.players.IsPlayer(playerId) {
+		return CommunityEventChangeNumGamesBody{}, fmt.Errorf("player is not player")
+	}
+
+	c.players.ChangePlayerNumGames(playerId, num)
+	return CommunityEventChangeNumGamesBody{
 		CommunityId: c.id,
 		PlayerId:    playerId,
 		OccurredAt:  time.Now(),

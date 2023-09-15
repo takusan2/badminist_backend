@@ -36,7 +36,7 @@ type CommunityRepository interface {
 		communityId community.CommunityId,
 		playerId player.PlayerId,
 		playerName player.PlayerName,
-		plyaerGender player.PlayerGender,
+		playerGender player.PlayerGender,
 		playerAge player.PlayerAge,
 		playerLevel player.PlayerLevel,
 		playerNumGames player.PlayerNumGames,
@@ -50,15 +50,16 @@ type CommunityRepository interface {
 		communityId community.CommunityId,
 		playerId player.PlayerId,
 		playerName player.PlayerName,
-		plyaerGender player.PlayerGender,
+		playerGender player.PlayerGender,
 		playerAge player.PlayerAge,
 		playerLevel player.PlayerLevel,
 		playerNumGames player.PlayerNumGames,
 		playerStatus player.PlayerStatus,
 	) error
-	ResetPlayerNumGames(
+	ChangePlayerNumGames(
 		communityId community.CommunityId,
 		playerId player.PlayerId,
+		playerNumGames player.PlayerNumGames,
 	) error
 	// Member
 	AddMember(
