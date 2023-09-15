@@ -17,28 +17,80 @@ tags:
 
 components:
   requestBodies:
-    article:
-      description: A JSON object containing article information
-      required: true
+    createCommunity:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/article'
+            $ref: '#/components/schemas/createCommunity'
+    renameCommunity:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/renameCommunity'
+    editCommunityDescription:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/editCommunityDescription'
+    deleteCommunity:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/deleteCommunity'
+    addPlayer:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/addPlayer'
+    removePlayer:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/removePlayer'
+    changePlayerProperty:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/changePlayerProperty'
+    resetPlayerNumGames:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/resetPlayerNumGames'
+    addMember:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/addMember'
+    removeMember:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/removeMember'
+    changeMemberRole:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/changeMemberRole'
   parameters:
-    userId:
-      name: X-User-ID
-      in: header
-      description: user id
-      required: true
-      schema:
-        type: integer
-    articleId:
-      name: articleId
+    community-id:
+      name: community-id
       in: path
-      description: article id
       required: true
       schema:
         type: integer
+    num-court:
+      name: num-court
+      in: query
+      required: true
+      schema:
+        type: integer
+    rule:
+      name: rule
+      in: query
+      required: true
+      schema:
+        type: string
   responses:
     success:
       description: Success
@@ -46,34 +98,116 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/success'
-    notFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/notFoundError'
   schemas:
-    community:
+    createCommunity:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    renameCommunity:
+      type: object
+      properties:
+        name:
+          type: string
+    editCommunityDescription:
+      type: object
+      properties:
+        description:
+          type: string
+    deleteCommunity:
+      type: object
+      properties:
+        community_id:
+          type: string
+    addPlayer:
+      type: object
+      properties:
+        name:
+          type: string
+        gender:
+          type: string
+        age:
+          type: integer
+        level:
+          type: string
+        num_games:
+          type: integer
+        status:
+          type: string
+    removePlayer:
+      type: object
+      properties:
+        community_id:
+          type: string
+        player_id:
+          type: string
+    changePlayerProperty:
+      type: object
+      properties:
+        community_id:
+          type: string
+        player_id:
+          type: string
+        name:
+          type: string
+        gender:
+          type: string
+        age:
+          type: integer
+        level:
+          type: string
+        num_games:
+          type: integer
+        status:
+          type: string
+    resetPlayerNumGames:
+      type: object
+      properties:
+        community_id:
+          type: string
+        player_id:
+          type: string
+    addMember:
+      type: object
+      properties:
+        community_id:
+          type: string
+        user_id:
+          type: string
+        role:
+          type: string
+    removeMember:
+      type: object
+      properties:
+        community_id:
+          type: string
+        user_id:
+          type: string
+    changeMemberRole:
+      type: object
+      properties:
+        community_id:
+          type: string
+        user_id:
+          type: string
+        role:
+          type: string
+    userReadModel:
       type: object
       properties:
         id:
           type: integer
         name:
           type: string
-        description:
+        email:
           type: string
         created_at:
           type: string
         updated_at:
           type: string
-    communityList:
-      type: object
-      properties:
-        communities:
-          type: array
-          items:
-            $ref: '#/components/schemas/community'
-    player:
+    playerReadModel:
       type: object
       properties:
         id:
@@ -100,43 +234,368 @@ components:
         players:
           type: array
           items:
-            $ref: '#/components/schemas/player'
-    user:
+            $ref: '#/components/schemas/playerReadModel'
+    memberReadModel:
+      type: object
+      properties:
+        member_id:
+          type: integer
+        user:
+          $ref: '#/components/schemas/userReadModel'
+        role:
+          type: string
+    memberList:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/memberReadModel'
+    communityReadModel:
       type: object
       properties:
         id:
           type: integer
         name:
           type: string
-        email:
+        description:
           type: string
         created_at:
           type: string
         updated_at:
           type: string
+    communityList:
+      type: object
+      properties:
+        communities:
+          type: array
+          items:
+            $ref: '#/components/schemas/communityReadModel'
+    team:
+      type: object
+      properties:
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/playerReadModel'
+    match:
+      type: object
+      properties:
+        left:
+          $ref: '#/components/schemas/team'
+        right:
+          $ref: '#/components/schemas/team'
+    matchCombination:
+      type: object
+      properties:
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/match'
     success:
       type: object
       properties:
         message:
           type: string
-    notFound:
+    failure:
       type: object
       properties:
         message:
           type: string
 
 paths:
+  /communities/create-community:
+    post:
+      summary: 'コミュニティの作成'
+      tags: ['communities']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/createCommunity'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/rename-community:
+    put:
+      summary: 'コミュニティ名の変更'
+      tags: ['communities']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/renameCommunity'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/edit-community-description:
+    put:
+      summary: 'コミュニティの説明文の変更'
+      tags: ['communities']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/editCommunityDescription'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/delete-community:
+    delete:
+      summary: 'コミュニティの削除'
+      tags: ['communities']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/deleteCommunity'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+
+  /communities/add-player:
+    post:
+      summary: 'コミュニティにプレイヤーを追加'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+      requestBody:
+        $ref: '#/components/requestBodies/addPlayer'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/remove-player:
+    delete:
+      summary: 'コミュニティからプレイヤーを削除'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+      requestBody:
+        $ref: '#/components/requestBodies/removePlayer'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/change-player-property:
+    put:
+      summary: 'プレイヤーのプロパティを変更'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+      requestBody:
+        $ref: '#/components/requestBodies/changePlayerProperty'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/add-member:
+    post:
+      summary: 'コミュニティにメンバーを追加'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+      requestBody:
+        $ref: '#/components/requestBodies/addMember'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '400':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/remove-member:
+    delete:
+      summary: 'コミュニティからメンバーを削除'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+      requestBody:
+        $ref: '#/components/requestBodies/removeMember'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '400':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/change-member-role:
+    put:
+      summary: 'メンバーの権限を変更'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+      requestBody:
+        $ref: '#/components/requestBodies/changeMemberRole'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '400':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
   /communities/{community-id}:
     get:
       summary: 'コミュニティ一覧の取得'
       tags: ['communities']
       deprecated: false
       parameters:
-        - name: community-id
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/ID'
+        - $ref: '#/components/parameters/community-id'
       responses:
         '200':
           description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communityList'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/{community-id}/players:
+    get:
+      summary: 'プレイヤー一覧の取得'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playerList'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/{community-id}/members:
+    get:
+      summary: 'メンバー一覧の取得'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/memberList'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/{community-id}/generate-matches:
+    get:
+      summary: 'マッチの生成'
+      tags: ['communities']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/community-id'
+        - $ref: '#/components/parameters/num-court'
+        - $ref: '#/components/parameters/rule'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/matchCombination'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
