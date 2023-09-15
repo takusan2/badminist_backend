@@ -57,6 +57,11 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/resetPlayerNumGames'
+    changePlayerNumGames:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/changePlayerNumGames'
     addMember:
       content:
         application/json:
@@ -75,6 +80,12 @@ components:
   parameters:
     community-id:
       name: community-id
+      in: path
+      required: true
+      schema:
+        type: integer
+    user-id:
+      name: user-id
       in: path
       required: true
       schema:
@@ -169,6 +180,15 @@ components:
           type: string
         player_id:
           type: string
+    changePlayerNumGames:
+      type: object
+      properties:
+        community_id:
+          type: string
+        player_id:
+          type: string
+        num_games:
+          type: integer
     addMember:
       type: object
       properties:
@@ -390,8 +410,6 @@ paths:
       summary: 'コミュニティにプレイヤーを追加'
       tags: ['communities']
       deprecated: false
-      parameters:
-        - $ref: '#/components/parameters/community-id'
       requestBody:
         $ref: '#/components/requestBodies/addPlayer'
       responses:
@@ -412,8 +430,6 @@ paths:
       summary: 'コミュニティからプレイヤーを削除'
       tags: ['communities']
       deprecated: false
-      parameters:
-        - $ref: '#/components/parameters/community-id'
       requestBody:
         $ref: '#/components/requestBodies/removePlayer'
       responses:
@@ -434,10 +450,48 @@ paths:
       summary: 'プレイヤーのプロパティを変更'
       tags: ['communities']
       deprecated: false
-      parameters:
-        - $ref: '#/components/parameters/community-id'
       requestBody:
         $ref: '#/components/requestBodies/changePlayerProperty'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/reset-player-num-games:
+    put:
+      summary: 'プレイヤーの試合数をリセット'
+      tags: ['communities']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/resetPlayerNumGames'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/change-player-num-games:
+    put:
+      summary: 'プレイヤーの試合数を変更'
+      tags: ['communities']
+      deprecated: false
+      requestBody:
+        $ref: '#/components/requestBodies/changePlayerNumGames'
       responses:
         '200':
           description: '成功'
@@ -593,6 +647,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/matchCombination'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /users/{user-id}:
+    get:
+      summary: 'ユーザーの取得'
+      tags: ['users']
+      deprecated: false
+      parameters:
+        - $ref: '#/components/parameters/user-id'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userReadModel'
         '404':
           description: '失敗'
           content:
