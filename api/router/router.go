@@ -35,7 +35,7 @@ func NewRouter(
 		ec.POST("/create-community", commandController.CreateCommunity)
 		ec.PUT("/rename-community", commandController.RenameCommunity)
 		ec.PUT("/edit-community-description", commandController.EditCommunityDescription)
-		ec.DELETE("/delete-community", commandController.DeleteCommunity)
+		ec.POST("/delete-community", commandController.DeleteCommunity)
 
 		// Player
 		ec.GET("/:community-id/players", query_controller.GetPlayerList)
@@ -43,13 +43,13 @@ func NewRouter(
 		ec.PUT("/change-player-property", commandController.ChangePlayerProperty)
 		ec.PUT("/reset-player-num-games", commandController.ResetPlayerNumGames)
 		ec.PUT("/change-player-num-games", commandController.ChangePlayerNumGames)
-		ec.DELETE("/remove-player", commandController.RemovePlayer)
+		ec.POST("/remove-player", commandController.RemovePlayer)
 
 		// Member
 		ec.GET("/:community-id/members", query_controller.GetMemberList)
 		ec.POST("/add-member", commandController.AddMember)
 		ec.PUT("/change-member-role", commandController.ChangeMemberRole)
-		ec.DELETE("/remove-member", commandController.RemoveMember)
+		ec.POST("/remove-member", commandController.RemoveMember)
 
 		// Match
 		ec.GET("/:community-id/generate-matches", query_controller.GenerateMatchCombination)

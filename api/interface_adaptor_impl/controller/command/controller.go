@@ -7,6 +7,7 @@ import (
 	"github.com/takuya-okada-01/badminist/api/domain/community/player"
 	"github.com/takuya-okada-01/badminist/api/domain/user"
 	"github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller/auth"
+	auth_dto "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/dto/auth"
 	command_dto "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/dto/command"
 
 	command_processor "github.com/takuya-okada-01/badminist/api/processor/command"
@@ -511,7 +512,7 @@ func (c *controller) ChangeMemberRole(
 }
 
 func (c *controller) TemporaryRegistration(ctx echo.Context) error {
-	var request command_dto.TemporaryRegistrationRequestBody
+	var request auth_dto.TemporaryRegistrationRequestBody
 	if err := ctx.Bind(&request); err != nil {
 		return ctx.JSON(400, err.Error())
 	}
@@ -542,7 +543,7 @@ func (c *controller) TemporaryRegistration(ctx echo.Context) error {
 }
 
 func (c *controller) ActivateUser(ctx echo.Context) error {
-	var request command_dto.ActivateUserRequestBody
+	var request auth_dto.ActivateUserRequestBody
 	if err := ctx.Bind(&request); err != nil {
 		return ctx.JSON(400, err.Error())
 	}
@@ -569,7 +570,7 @@ func (c *controller) ActivateUser(ctx echo.Context) error {
 }
 
 func (c *controller) Login(ctx echo.Context) error {
-	var request command_dto.LoginRequestBody
+	var request auth_dto.LoginRequestBody
 	if err := ctx.Bind(&request); err != nil {
 		return ctx.JSON(400, err.Error())
 	}
@@ -591,5 +592,5 @@ func (c *controller) Login(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(400, err.Error())
 	}
-	return ctx.JSON(200, token)
+	return ctx.JSON(200, auth_dto.LoginResponseBody{Token: token})
 }
