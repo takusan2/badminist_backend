@@ -15,6 +15,12 @@ func NewUserConfirmPass() UserConfirmPass {
 	return UserConfirmPass{randomString}
 }
 
+func (u *UserConfirmPass) ReissueConfirmPass() error {
+	randomString := random.String(6)
+	u.value = randomString
+	return nil
+}
+
 func UserConfirmPassFromStr(str string) (UserConfirmPass, error) {
 	if len(str) != 6 {
 		return UserConfirmPass{}, errors.New("確認コードは6文字です")

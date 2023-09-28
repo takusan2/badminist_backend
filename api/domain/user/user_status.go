@@ -38,7 +38,7 @@ func UserStatusFromStr(status string) (UserStatus, error) {
 	}
 }
 
-func (u *UserStatus) Value() string {
+func (u UserStatus) Value() string {
 	return u.value
 }
 

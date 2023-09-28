@@ -79,6 +79,7 @@ func NewRouter(
 	{
 		eu.GET("/:user-id", query_controller.GetUser)
 		eu.GET("/me", query_controller.GetMe)
+		eu.POST("/reissue-confirm-pass", commandController.ReissueConfirmPass)
 	}
 
 	return e

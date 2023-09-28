@@ -21,6 +21,6 @@ func NewUserEmail(email string) (UserEmail, error) {
 	return UserEmail{email}, nil
 }
 
-func (u *UserEmail) Value() string {
+func (u UserEmail) Value() string {
 	return u.value
 }

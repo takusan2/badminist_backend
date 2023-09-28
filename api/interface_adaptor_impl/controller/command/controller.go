@@ -30,6 +30,7 @@ type Controller interface {
 	TemporaryRegistration(ctx echo.Context) error
 	ActivateUser(ctx echo.Context) error
 	Login(ctx echo.Context) error
+	ReissueConfirmPass(ctx echo.Context) error
 }
 
 type controller struct {
@@ -595,4 +596,18 @@ func (c *controller) Login(ctx echo.Context) error {
 		return ctx.JSON(400, err.Error())
 	}
 	return ctx.JSON(200, auth_dto.LoginResponseBody{Token: token})
+}
+
+func (c *controller) ReissueConfirmPass(ctx echo.Context) error {
+
+	userId := auth.GetCurrentUser(ctx)
+	id, err := user.UserIdFromStr(userId)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	if err = c.commandProcessor.ReissueConfirmPass(id); err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+
+	return ctx.JSON(200, map[string]any{"message": "success"})
 }

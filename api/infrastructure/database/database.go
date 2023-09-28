@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -20,14 +19,11 @@ func Connect() *gorm.DB {
 		ParseTime: true,
 	}
 	dsn := cfg.FormatDSN()
-	fmt.Printf("dsn: %s\n", dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		fmt.Print("failed to Connected to database\n")
 		panic(err.Error())
 	}
 	db.Logger.LogMode(3)
-	fmt.Print("Connected to database!!\n")
 	return db
 }
 

@@ -33,6 +33,14 @@ func (u *UserRepositoryImpl) FindUserByEmail(email user.UserEmail) (user.User, e
 	return userEntity.ToDomainObject(), nil
 }
 
+func (u *UserRepositoryImpl) FindUserById(id user.UserId) (user.User, error) {
+	userEntity, err := u.dao.FindUserById(u.db, id)
+	if err != nil {
+		return user.User{}, err
+	}
+	return userEntity.ToDomainObject(), nil
+}
+
 // CreateUser implements repository_if.UserRepository.
 func (u *UserRepositoryImpl) CreateUser(
 	id user.UserId,
@@ -73,6 +81,16 @@ func (u *UserRepositoryImpl) ActivateUser(
 ) error {
 	status, _ := user.NewUserStatus(user.Active)
 	if err := u.dao.UpdateUserStatus(u.db, id, status); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *UserRepositoryImpl) ReissueConfirmPass(
+	id user.UserId,
+	confirmPass user.UserConfirmPass,
+) error {
+	if err := u.dao.UpdateUserConfirmPass(u.db, id, confirmPass); err != nil {
 		return err
 	}
 	return nil

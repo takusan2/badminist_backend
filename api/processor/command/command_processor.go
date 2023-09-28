@@ -101,6 +101,9 @@ type CommandProcessor interface {
 		email user.UserEmail,
 		password user.UserPassword,
 	) (string, error)
+	ReissueConfirmPass(
+		id user.UserId,
+	) error
 }
 
 type commandProcessor struct {
@@ -505,7 +508,6 @@ func (c *commandProcessor) TemporaryRegistration(
 		<p>Badministへ登録いただきありがとうございます</p>
 		<p>以下の確認コードをアプリに入力して登録を完了してください</p>
 		<p>確認コード: `+confirmPass.Value()+`</p>
-		
 		`,
 	)
 
@@ -539,23 +541,62 @@ func (c *commandProcessor) Login(
 	email user.UserEmail,
 	password user.UserPassword,
 ) (string, error) {
-	user, err := c.userRepo.FindUserByEmail(email)
+	userDomain, err := c.userRepo.FindUserByEmail(email)
 	if err != nil {
 		return "", err
 	}
-	if !user.Authenticate(password) {
+	if !userDomain.Authenticate(password) {
 		return "", errors.New("メールアドレスかパスワードが間違っています")
 	}
 	// jwtの発行
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.BreachEncapsulationOfId().Value(),
+		"user_id": userDomain.BreachEncapsulationOfId().Value(),
 		"exp":     time.Now().Add(time.Hour * 24).Unix(),
 	})
-
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
 	if err != nil {
 		return "", err
 	}
 
+	if userDomain.BreachEncapsulationOfStatus().Value() == user.Inactive.String() {
+		c.emailServer.SendEmail(
+			[]string{email.Value()},
+			"確認コードのお知らせ",
+			`
+			<p>Badministへ登録いただきありがとうございます</p>
+			<p>以下の確認コードをアプリに入力して登録を完了してください</p>
+			<p>確認コード: `+userDomain.BreachEncapsulationOfConfirmPass().Value()+`</p>
+			`,
+		)
+	}
 	return tokenString, nil
+}
+
+func (c *commandProcessor) ReissueConfirmPass(
+	id user.UserId,
+) error {
+	user, err := c.userRepo.FindUserById(id)
+	if err != nil {
+		return err
+	}
+	event, err := user.ReissueConfirmPass()
+	if err != nil {
+		return err
+	}
+	if err := c.userRepo.ReissueConfirmPass(
+		event.UserId,
+		event.ConfirmPass,
+	); err != nil {
+		return err
+	}
+	c.emailServer.SendEmail(
+		[]string{user.BreachEncapsulationOfEmail().Value()},
+		"確認コードのお知らせ",
+		`
+		<p>Badministへ登録いただきありがとうございます</p>
+		<p>以下の確認コードをアプリに入力して登録を完了してください</p>
+		<p>確認コード: `+user.BreachEncapsulationOfConfirmPass().Value()+`</p>
+		`,
+	)
+	return nil
 }

@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"fmt"
-
 	"github.com/resendlabs/resend-go"
 )
 
@@ -36,10 +34,7 @@ func (e *emailServer) SendEmail(
 		Html:    html,
 	}
 
-	sent, err := e.client.Emails.Send(params)
-	if err != nil {
-		fmt.Println(err.Error())
+	if _, err := e.client.Emails.Send(params); err != nil {
 		return
 	}
-	fmt.Println(sent.Id)
 }

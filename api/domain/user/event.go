@@ -21,3 +21,9 @@ type ActivateEventBody struct {
 	UserId     UserId
 	OccurredAt time.Time
 }
+
+type ReissueConfirmPassEventBody struct {
+	UserId      UserId
+	ConfirmPass UserConfirmPass
+	OccurredAt  time.Time
+}

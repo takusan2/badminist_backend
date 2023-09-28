@@ -965,3 +965,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/failure'
+  /users/reissue-confirm-pass:
+    post:
+      summary: 'パスワード再発行'
+      tags: ['users']
+      deprecated: false
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success'
+        '400':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'

@@ -61,10 +61,21 @@ func (u *User) Activate() (ActivateEventBody, error) {
 	}, nil
 }
 
-func (u *User) Authenticate(password UserPassword) bool {
+func (u User) Authenticate(password UserPassword) bool {
 	return u.password.Authenticate(password)
 }
 
-func (u *User) CompareConfirmPass(confirmPass UserConfirmPass) bool {
+func (u User) CompareConfirmPass(confirmPass UserConfirmPass) bool {
 	return u.confirmPass.CompareConfirmPass(confirmPass)
+}
+
+func (u *User) ReissueConfirmPass() (ReissueConfirmPassEventBody, error) {
+	if err := u.confirmPass.ReissueConfirmPass(); err != nil {
+		return ReissueConfirmPassEventBody{}, err
+	}
+	return ReissueConfirmPassEventBody{
+		UserId:      u.id,
+		ConfirmPass: u.confirmPass,
+		OccurredAt:  time.Now(),
+	}, nil
 }
