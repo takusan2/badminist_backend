@@ -10,14 +10,15 @@ import (
 type Player struct {
 	Id          string    `gorm:"type:varchar(36);primaryKey;"`
 	CommunityId string    `gorm:"type:varchar(36);not null;"`
+	Community   Community `gorm:"foreignKey:CommunityId;constraint:OnDelete:CASCADE;"`
 	Name        string    `gorm:"type:varchar(255);not null;"`
 	Gender      string    `gorm:"type:varchar(255);not null;"`
 	Age         int       `gorm:"type:int(11);not null;"`
 	Level       string    `gorm:"type:varchar(255);not null;"`
 	NumGames    int       `gorm:"type:int(11);not null;"`
 	Status      string    `gorm:"type:varchar(255);not null;"`
-	CreatedAt   time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
-	UpdatedAt   time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 func NewPlayer(

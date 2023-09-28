@@ -532,14 +532,16 @@ func (c *controller) TemporaryRegistration(ctx echo.Context) error {
 		return ctx.JSON(400, err.Error())
 	}
 
-	if err := c.commandProcessor.TemporaryRegistration(
+	token, err := c.commandProcessor.TemporaryRegistration(
 		name,
 		email,
 		password,
-	); err != nil {
+	)
+
+	if err != nil {
 		return ctx.JSON(400, err.Error())
 	}
-	return ctx.JSON(200, map[string]any{"message": "success"})
+	return ctx.JSON(200, map[string]any{"token": token})
 }
 
 func (c *controller) ActivateUser(ctx echo.Context) error {

@@ -9,14 +9,14 @@ import (
 )
 
 type Member struct {
-	Id          string    `gorm:"primaryKey auto_increment;"`
+	Id          string    `gorm:"primaryKey;"`
 	UserId      string    `gorm:"type:varchar(36);not null;"`
-	User        User      `gorm:"foreignKey:UserId"`
-	CommunityId string    `gorm:"type:varchar(36);not null;"`
-	Community   Community `gorm:"foreignKey:CommunityId"`
+	User        User      `gorm:"foreignKey:UserId;constraint:OnDelete:CASCADE;"`
+	CommunityId string    `gorm:"type:varchar(36);not null"`
+	Community   Community `gorm:"foreignKey:CommunityId;constraint:OnDelete:CASCADE;"`
 	Role        string    `gorm:"type:varchar(255);not null;"`
-	CreatedAt   time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
-	UpdatedAt   time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 func NewMember(

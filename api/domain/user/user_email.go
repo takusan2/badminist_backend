@@ -1,7 +1,7 @@
 package user
 
 import (
-	"fmt"
+	"errors"
 	"regexp"
 )
 
@@ -13,9 +13,9 @@ func NewUserEmail(email string) (UserEmail, error) {
 	// emailの形式かどうかのバリデーション
 	// 正規表現でバリデーションを行う
 
-	emial_regexp := regexp.MustCompile(`^(?i:[^ @"<>]+|".*")@(?i:[a-z1-9.])+.(?i:[a-z])+$`)
-	if !emial_regexp.MatchString(email) {
-		return UserEmail{}, fmt.Errorf("invalid email")
+	email_regexp := regexp.MustCompile(`^(?i:[^ @"<>]+|".*")@(?i:[a-z1-9.])+.(?i:[a-z])+$`)
+	if !email_regexp.MatchString(email) {
+		return UserEmail{}, errors.New("正しいメールアドレスを入力してください")
 	}
 
 	return UserEmail{email}, nil

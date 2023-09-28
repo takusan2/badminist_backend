@@ -1,7 +1,7 @@
 package user
 
 import (
-	"fmt"
+	"errors"
 	"regexp"
 
 	"golang.org/x/crypto/bcrypt"
@@ -13,15 +13,15 @@ type UserPassword struct {
 
 func NewUserPassword(password string) (UserPassword, error) {
 	if len(password) < 6 {
-		return UserPassword{}, fmt.Errorf("password is too short")
+		return UserPassword{}, errors.New("パスワードは6文字以上で入力してください")
 	}
 	if len(password) > 255 {
-		return UserPassword{}, fmt.Errorf("password is too long")
+		return UserPassword{}, errors.New("パスワードは255文字以内で入力してください")
 	}
 	// 正規表現でバリデーションを行う
 	password_regexp := regexp.MustCompile(`^(?i:[^ @"<>]+|".*")`)
 	if !password_regexp.MatchString(password) {
-		return UserPassword{}, fmt.Errorf("@,\"<,>, and space are not allowed")
+		return UserPassword{}, errors.New("パスワードに「スペース, @, \", <>」は使用できません")
 	}
 	return UserPassword{password}, nil
 }

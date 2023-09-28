@@ -28,77 +28,92 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/temporaryRegistration'
+            $ref: '#/components/schemas/temporaryRegistrationRequestBody'
+            required: true
     activateUser:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/activateUser'
+            $ref: '#/components/schemas/activateUserRequestBody'
+            required: true
     login:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/login'
+            $ref: '#/components/schemas/loginRequestBody'
+            required: true
     createCommunity:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/createCommunity'
+            $ref: '#/components/schemas/createCommunityRequestBody'
+            required: true
     renameCommunity:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/renameCommunity'
+            $ref: '#/components/schemas/renameCommunityRequestBody'
+            required: true
     editCommunityDescription:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/editCommunityDescription'
+            $ref: '#/components/schemas/editCommunityDescriptionRequestBody'
+            required: true
     deleteCommunity:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/deleteCommunity'
+            $ref: '#/components/schemas/deleteCommunityRequestBody'
+            required: true
     addPlayer:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/addPlayer'
+            $ref: '#/components/schemas/addPlayerRequestBody'
+            required: true
     removePlayer:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/removePlayer'
+            $ref: '#/components/schemas/removePlayerRequestBody'
+            required: true
     changePlayerProperty:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/changePlayerProperty'
+            $ref: '#/components/schemas/changePlayerPropertyRequestBody'
+            required: true
     resetPlayerNumGames:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/resetPlayerNumGames'
+            $ref: '#/components/schemas/resetPlayerNumGamesRequestBody'
+            required: true
     changePlayerNumGames:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/changePlayerNumGames'
+            $ref: '#/components/schemas/changePlayerNumGamesRequestBody'
+            required: true
     addMember:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/addMember'
+            $ref: '#/components/schemas/addMemberRequestBody'
+            required: true
     removeMember:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/removeMember'
+            $ref: '#/components/schemas/removeMemberRequestBody'
+            required: true
     changeMemberRole:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/changeMemberRole'
+            $ref: '#/components/schemas/changeMemberRoleRequestBody'
+            required: true
   parameters:
     community-id:
       name: community-id
@@ -131,145 +146,193 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/success'
+            required: true
   schemas:
-    temporaryRegistration:
+    temporaryRegistrationRequestBody:
       type: object
       properties:
         name:
           $ref: '#/components/schemas/userName'
+          required: true
         email:
           $ref: '#/components/schemas/userEmail'
+          required: true
         password:
           $ref: '#/components/schemas/userPassword'
-    activateUser:
+          required: true
+    activateUserRequestBody:
       type: object
       properties:
         email:
           $ref: '#/components/schemas/userEmail'
-        confirmPass:
+          required: true
+        confirm_pass:
           $ref: '#/components/schemas/userConfirmPass'
-    login:
+          required: true
+    loginRequestBody:
       type: object
       properties:
         email:
           $ref: '#/components/schemas/userEmail'
+          required: true
         password:
           $ref: '#/components/schemas/userPassword'
-    createCommunity:
+          required: true
+    createCommunityRequestBody:
       type: object
       properties:
         name:
           $ref: '#/components/schemas/communityName'
+          required: true
         description:
           $ref: '#/components/schemas/communityDescription'
-    renameCommunity:
+          required: true
+    renameCommunityRequestBody:
       type: object
       properties:
         name:
           type: string
-    editCommunityDescription:
+    editCommunityDescriptionRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
+          required: true
         description:
           type: string
-    deleteCommunity:
+    deleteCommunityRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
-    addPlayer:
+          required: true
+    addPlayerRequestBody:
       type: object
       properties:
+        community_id:
+          $ref: '#/components/schemas/communityId'
+          required: true
         name:
           $ref: '#/components/schemas/playerName'
+          required: true
         gender:
           $ref: '#/components/schemas/playerGender'
         age:
           $ref: '#/components/schemas/playerAge'
         level:
           $ref: '#/components/schemas/playerLevel'
+          required: true
         num_games:
           $ref: '#/components/schemas/playerNumGames'
+          required: true
         status:
           $ref: '#/components/schemas/playerStatus'
-    removePlayer:
+          required: true
+    removePlayerRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
+          required: true
         player_id:
           $ref: '#/components/schemas/playerId'
-    changePlayerProperty:
+          required: true
+    changePlayerPropertyRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
+          required: true
         player_id:
           $ref: '#/components/schemas/playerId'
+          required: true
         name:
           $ref: '#/components/schemas/playerName'
+          required: true
         gender:
           $ref: '#/components/schemas/playerGender'
+          required: true
         age:
           $ref: '#/components/schemas/playerAge'
+          required: true
         level:
           $ref: '#/components/schemas/playerLevel'
+          required: true
         num_games:
           $ref: '#/components/schemas/playerNumGames'
+          required: true
         status:
           $ref: '#/components/schemas/playerStatus'
-    resetPlayerNumGames:
+          required: true
+    resetPlayerNumGamesRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
+          required: true
         player_id:
           $ref: '#/components/schemas/playerId'
-    changePlayerNumGames:
+          required: true
+    changePlayerNumGamesRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
+          required: true
         player_id:
           $ref: '#/components/schemas/playerId'
+          required: true
         num_games:
           $ref: '#/components/schemas/playerNumGames'
-    addMember:
+          required: true
+    addMemberRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
+          required: true
         user_id:
           $ref: '#/components/schemas/userId'
+          required: true
         role:
           $ref: '#/components/schemas/role'
-    removeMember:
+          required: true
+    removeMemberRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
+          required: true
         user_id:
           $ref: '#/components/schemas/userId'
-    changeMemberRole:
+          required: true
+    changeMemberRoleRequestBody:
       type: object
       properties:
         community_id:
           $ref: '#/components/schemas/communityId'
+          required: true
         user_id:
           $ref: '#/components/schemas/userId'
+          required: true
         role:
           $ref: '#/components/schemas/role'
+          required: true
     userReadModel:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/userId'
+          required: true
         name:
           $ref: '#/components/schemas/userName'
+          required: true
         email:
           $ref: '#/components/schemas/userEmail'
+          required: true
+        status:
+          $ref: '#/components/schemas/userStatus'
+          required: true
         created_at:
           $ref: '#/components/schemas/createdAt'
         updated_at:
@@ -279,65 +342,57 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/playerId'
+          required: true
         name:
           $ref: '#/components/schemas/playerName'
+          required: true
         gender:
           $ref: '#/components/schemas/playerGender'
+          required: true
         age:
           $ref: '#/components/schemas/playerAge'
+          required: true
         level:
           $ref: '#/components/schemas/playerLevel'
+          required: true
         num_games:
           $ref: '#/components/schemas/playerNumGames'
+          required: true
         status:
           $ref: '#/components/schemas/playerStatus'
+          required: true
         created_at:
           $ref: '#/components/schemas/createdAt'
         updated_at:
           $ref: '#/components/schemas/updatedAt'
-    playerList:
-      type: object
-      properties:
-        players:
-          type: array
-          items:
-            $ref: '#/components/schemas/playerReadModel'
     memberReadModel:
       type: object
       properties:
         member_id:
           $ref: '#/components/schemas/memberId'
+          required: true
         user:
           $ref: '#/components/schemas/userReadModel'
+          required: true
         role:
           $ref: '#/components/schemas/role'
-    memberList:
-      type: object
-      properties:
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/memberReadModel'
+          required: true
     communityReadModel:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/communityId'
+          required: true
         name:
           $ref: '#/components/schemas/communityName'
+          required: true
         description:
           $ref: '#/components/schemas/communityDescription'
+          required: true
         created_at:
           $ref: '#/components/schemas/createdAt'
         updated_at:
           $ref: '#/components/schemas/updatedAt'
-    communityList:
-      type: object
-      properties:
-        communities:
-          type: array
-          items:
-            $ref: '#/components/schemas/communityReadModel'
     team:
       type: object
       properties:
@@ -345,13 +400,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/playerReadModel'
+            required: true
     match:
       type: object
       properties:
         left:
           $ref: '#/components/schemas/team'
+          required: true
         right:
           $ref: '#/components/schemas/team'
+          required: true
     matchCombination:
       type: object
       properties:
@@ -408,6 +466,9 @@ components:
       type: string
     userEmail:
       type: string
+    userStatus:
+      type: string
+      enum: [inactive, active]
     userPassword:
       type: string
     userConfirmPass:
@@ -434,7 +495,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/success'
+                $ref: '#/components/schemas/token'
         '400':
           description: '失敗'
           content:
@@ -687,8 +748,6 @@ paths:
       deprecated: false
       security:
         - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/community-id'
       requestBody:
         $ref: '#/components/requestBodies/addMember'
       responses:
@@ -711,8 +770,6 @@ paths:
       deprecated: false
       security:
         - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/community-id'
       requestBody:
         $ref: '#/components/requestBodies/removeMember'
       responses:
@@ -735,8 +792,6 @@ paths:
       deprecated: false
       security:
         - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/community-id'
       requestBody:
         $ref: '#/components/requestBodies/changeMemberRole'
       responses:
@@ -752,9 +807,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/failure'
-  /communities/{community-id}:
+  /communities:
     get:
       summary: 'コミュニティ一覧の取得'
+      tags: ['communities']
+      deprecated: false
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/communityReadModel'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /communities/{community-id}:
+    get:
+      summary: 'コミュニティの取得'
       tags: ['communities']
       deprecated: false
       security:
@@ -767,7 +844,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/communityList'
+                $ref: '#/components/schemas/communityReadModel'
         '404':
           description: '失敗'
           content:
@@ -789,7 +866,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/playerList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/playerReadModel'
         '404':
           description: '失敗'
           content:
@@ -811,7 +890,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/memberList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/memberReadModel'
         '404':
           description: '失敗'
           content:
@@ -851,6 +932,26 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/user-id'
+      responses:
+        '200':
+          description: '成功'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userReadModel'
+        '404':
+          description: '失敗'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/failure'
+  /users/me:
+    get:
+      summary: '自分のユーザー情報の取得'
+      tags: ['users']
+      deprecated: false
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: '成功'

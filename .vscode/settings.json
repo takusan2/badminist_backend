@@ -2,12 +2,14 @@
   "cSpell.words": [
     "badminist",
     "echojwt",
+    "getkin",
     "godotenv",
     "gorm",
     "joho",
     "labstack",
     "logrus",
     "readmodel",
+    "resendlabs",
     "sirupsen"
   ]
 }

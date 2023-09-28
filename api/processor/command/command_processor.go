@@ -11,6 +11,7 @@ import (
 	"github.com/takuya-okada-01/badminist/api/domain/community/player"
 	"github.com/takuya-okada-01/badminist/api/domain/user"
 	command_repository_if "github.com/takuya-okada-01/badminist/api/interface_adaptor_if/repository_if/command"
+	"github.com/takuya-okada-01/badminist/api/utils"
 )
 
 type CommandProcessor interface {
@@ -91,7 +92,7 @@ type CommandProcessor interface {
 		name user.UserName,
 		email user.UserEmail,
 		password user.UserPassword,
-	) error
+	) (string, error)
 	ActivateUser(
 		email user.UserEmail,
 		confirmPass user.UserConfirmPass,
@@ -105,15 +106,18 @@ type CommandProcessor interface {
 type commandProcessor struct {
 	communityRepo command_repository_if.CommunityRepository
 	userRepo      command_repository_if.UserRepository
+	emailServer   utils.EmailServer
 }
 
 func NewCommandProcessor(
 	communityRepo command_repository_if.CommunityRepository,
 	userRepo command_repository_if.UserRepository,
+	emailServer utils.EmailServer,
 ) CommandProcessor {
 	return &commandProcessor{
 		communityRepo: communityRepo,
 		userRepo:      userRepo,
+		emailServer:   emailServer,
 	}
 }
 
@@ -468,7 +472,7 @@ func (c *commandProcessor) TemporaryRegistration(
 	name user.UserName,
 	email user.UserEmail,
 	password user.UserPassword,
-) error {
+) (string, error) {
 	confirmPass := user.NewUserConfirmPass()
 	status, _ := user.NewUserStatus(user.Inactive)
 	id := user.NewUserId()
@@ -481,11 +485,31 @@ func (c *commandProcessor) TemporaryRegistration(
 		confirmPass,
 		status,
 	); err != nil {
-		return err
+		return "", err
 	}
 
-	// TODO: メール送信処理を実装する
-	return nil
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": id.Value(),
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
+	if err != nil {
+		return "", err
+	}
+
+	c.emailServer.SendEmail(
+		[]string{email.Value()},
+		"確認コードのお知らせ",
+		`
+		<p>Badministへ登録いただきありがとうございます</p>
+		<p>以下の確認コードをアプリに入力して登録を完了してください</p>
+		<p>確認コード: `+confirmPass.Value()+`</p>
+		
+		`,
+	)
+
+	return tokenString, nil
 }
 
 func (c *commandProcessor) ActivateUser(
@@ -497,7 +521,7 @@ func (c *commandProcessor) ActivateUser(
 		return err
 	}
 	if !user.CompareConfirmPass(confirmPass) {
-		return errors.New("password is not match")
+		return errors.New("確認用パスワードが間違っています")
 	}
 	event, err := user.Activate()
 	if err != nil {
@@ -520,7 +544,7 @@ func (c *commandProcessor) Login(
 		return "", err
 	}
 	if !user.Authenticate(password) {
-		return "", errors.New("password is not match")
+		return "", errors.New("メールアドレスかパスワードが間違っています")
 	}
 	// jwtの発行
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

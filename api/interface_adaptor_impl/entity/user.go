@@ -8,14 +8,14 @@ import (
 )
 
 type User struct {
-	Id          string    `json:"id" gorm:"type:varchar(36);primaryKey;"`
-	Name        string    `json:"name" gorm:"type:varchar(255);not null;"`
-	Email       string    `json:"email" gorm:"type:varchar(255);not null;"`
-	Password    string    `json:"password" gorm:"type:varchar(255);not null;"`
-	ConfirmPass string    `json:"confirm_pass" gorm:"type:varchar(255);not null;"`
-	Status      string    `json:"status" gorm:"type:varchar(255);not null;"`
-	CreatedAt   time.Time `json:"created_at" gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
-	UpdatedAt   time.Time `json:"updated_at" gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
+	Id          string `gorm:"type:varchar(36);primaryKey;"`
+	Name        string `gorm:"type:varchar(255);not null;"`
+	Email       string `gorm:"type:varchar(255);not null;unique"`
+	Password    string `gorm:"type:varchar(255);not null;"`
+	ConfirmPass string `gorm:"type:varchar(255);not null;"`
+	Status      string `gorm:"type:varchar(255);not null;"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 func NewUser(
@@ -79,8 +79,9 @@ func (u *User) ToDomainObject() user.User {
 
 func (u *User) ToReadModel() read_model.User {
 	return read_model.User{
-		Id:    u.Id,
-		Name:  u.Name,
-		Email: u.Email,
+		Id:     u.Id,
+		Name:   u.Name,
+		Email:  u.Email,
+		Status: u.Status,
 	}
 }

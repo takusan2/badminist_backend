@@ -7,11 +7,11 @@ import (
 )
 
 type Community struct {
-	Id          string    `gorm:"type:varchar(36);primaryKey;"`
-	Name        string    `gorm:"type:varchar(255);not null;"`
-	Description string    `gorm:"type:text;"`
-	CreatedAt   time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
-	UpdatedAt   time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;"`
+	Id          string `gorm:"type:varchar(36);primaryKey;"`
+	Name        string `gorm:"type:varchar(255);not null;"`
+	Description string `gorm:"type:text;"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 func NewCommunity(

@@ -16,6 +16,7 @@ type Controller interface {
 	GetPlayerList(ctx echo.Context) error
 	GetMemberList(ctx echo.Context) error
 	GetUser(ctx echo.Context) error
+	GetMe(ctx echo.Context) error
 }
 
 type controller struct {
@@ -106,7 +107,22 @@ func (c *controller) GetUser(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(400, err.Error())
 	}
-	user, err := c.processor.FindUserById(
+	user, err := c.processor.GetUserById(
+		userId,
+	)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	return ctx.JSON(200, user)
+}
+
+func (c *controller) GetMe(ctx echo.Context) error {
+	id := auth.GetCurrentUser(ctx)
+	userId, err := user.UserIdFromStr(id)
+	if err != nil {
+		return ctx.JSON(400, err.Error())
+	}
+	user, err := c.processor.GetUserById(
 		userId,
 	)
 	if err != nil {

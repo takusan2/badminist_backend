@@ -4,8 +4,10 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/resendlabs/resend-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/takuya-okada-01/badminist/api/infrastructure/database"
+	"github.com/takuya-okada-01/badminist/api/utils"
 
 	command_controller "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller/command"
 	query_controller "github.com/takuya-okada-01/badminist/api/interface_adaptor_impl/controller/query"
@@ -20,14 +22,8 @@ import (
 )
 
 func init() {
-	// Log as JSON instead of the default ASCII formatter.
 	log.SetFormatter(&log.JSONFormatter{})
-
-	// Output to stdout instead of the default stderr
-	// Can be any io.Writer, see below for File example
 	log.SetOutput(os.Stdout)
-
-	// Only log the warning severity or above.
 	log.SetLevel(log.DebugLevel)
 }
 
@@ -35,6 +31,10 @@ func main() {
 	godotenv.Load(".env")
 	db := database.Connect()
 	defer database.CloseDB(db)
+
+	resendApiKey := os.Getenv("RESEND_API_KEY")
+	resendClient := resend.NewClient(resendApiKey)
+	emailServer := utils.NewEmailServer(resendClient)
 
 	communityDao := command_dao.NewCommunityDaoImpl()
 	userDao := command_dao.NewUserDaoImpl()
@@ -45,8 +45,16 @@ func main() {
 	commandCommunityRepo := command_repository.NewCommunityRepositoryImpl(db, communityDao)
 	commandUserRepo := command_repository.NewUserRepositoryImpl(db, userDao)
 
-	commandProcessor := command_processor.NewCommandProcessor(commandCommunityRepo, commandUserRepo)
-	queryProcessor := query_processor.NewQueryProcessor(db, queryCommunityDao, queryUserDao)
+	commandProcessor := command_processor.NewCommandProcessor(
+		commandCommunityRepo,
+		commandUserRepo,
+		emailServer,
+	)
+	queryProcessor := query_processor.NewQueryProcessor(
+		db,
+		queryCommunityDao,
+		queryUserDao,
+	)
 
 	commandController := command_controller.NewController(commandProcessor, queryProcessor)
 	queryController := query_controller.NewController(queryProcessor)

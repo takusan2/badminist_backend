@@ -17,7 +17,7 @@ func NewUserConfirmPass() UserConfirmPass {
 
 func UserConfirmPassFromStr(str string) (UserConfirmPass, error) {
 	if len(str) != 6 {
-		return UserConfirmPass{}, errors.New("length is not 6")
+		return UserConfirmPass{}, errors.New("確認コードは6文字です")
 	}
 	return UserConfirmPass{str}, nil
 }

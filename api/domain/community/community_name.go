@@ -1,7 +1,7 @@
 package community
 
 import (
-	"fmt"
+	"errors"
 	"regexp"
 )
 
@@ -11,15 +11,15 @@ type CommunityName struct {
 
 func NewCommunityName(name string) (CommunityName, error) {
 	if name == "" {
-		return CommunityName{}, fmt.Errorf("user name is empty")
+		return CommunityName{}, errors.New("コミュニティ名を入力してください")
 	}
 	if len(name) > 255 {
-		return CommunityName{}, fmt.Errorf("user name is too long")
+		return CommunityName{}, errors.New("コミュニティ名は255文字以内で入力してください")
 	}
 	// 半角空白または全角空白のみの場合はエラー
 	regexp_pattern := regexp.MustCompile(`^[ 　]+$`)
 	if regexp_pattern.MatchString(name) {
-		return CommunityName{}, fmt.Errorf("user name is invalid")
+		return CommunityName{}, errors.New("空白のみのコミュニティ名は登録できません")
 	}
 
 	return CommunityName{name}, nil

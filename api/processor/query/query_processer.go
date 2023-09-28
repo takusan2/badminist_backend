@@ -47,7 +47,7 @@ type QueryProcessor interface {
 	GetMemberList(
 		communityId community.CommunityId,
 	) (read_model.MemberList, error)
-	FindUserById(
+	GetUserById(
 		id user.UserId,
 	) (read_model.User, error)
 }
@@ -204,7 +204,7 @@ func (q *queryProcessor) GetMemberList(
 	return memberList, nil
 }
 
-func (q *queryProcessor) FindUserById(
+func (q *queryProcessor) GetUserById(
 	id user.UserId,
 ) (read_model.User, error) {
 	user, err := q.userDao.FindUserById(q.db, id)

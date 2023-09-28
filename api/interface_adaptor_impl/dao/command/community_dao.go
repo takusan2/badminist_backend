@@ -1,6 +1,8 @@
 package command_dao
 
 import (
+	"errors"
+
 	"github.com/takuya-okada-01/badminist/api/domain/community"
 	"github.com/takuya-okada-01/badminist/api/domain/community/member"
 	"github.com/takuya-okada-01/badminist/api/domain/community/player"
@@ -15,17 +17,6 @@ type CommunityDaoImpl struct{}
 
 func NewCommunityDaoImpl() command_dao_if.CommunityDao {
 	return &CommunityDaoImpl{}
-}
-
-// DeleteCommunity implements dao_if.CommunityDao.
-func (*CommunityDaoImpl) DeleteCommunity(
-	db *gorm.DB,
-	communityId community.CommunityId,
-) error {
-	if err := db.Delete(&entity.Community{}, communityId).Error; err != nil {
-		return err
-	}
-	return nil
 }
 
 // FindCommunitiesByUserId implements dao_if.CommunityDao.
@@ -121,7 +112,12 @@ func (*CommunityDaoImpl) InsertCommunity(
 	community entity.Community,
 ) error {
 	if err := db.Create(&community).Error; err != nil {
-		return err
+		switch err.Error() {
+		case "Error 1062: Duplicate entry 'community_id' for key 'PRIMARY'":
+			return errors.New("既に存在するコミュニティIDです")
+		default:
+			return err
+		}
 	}
 	return nil
 }
@@ -154,6 +150,21 @@ func (*CommunityDaoImpl) InsertPlayer(
 	player entity.Player,
 ) error {
 	if err := db.Create(&player).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (*CommunityDaoImpl) DeleteCommunity(
+	db *gorm.DB,
+	communityId community.CommunityId,
+) error {
+	if err := db.
+		Delete(
+			&entity.Community{},
+			"id = ?",
+			communityId.Value(),
+		).Error; err != nil {
 		return err
 	}
 	return nil

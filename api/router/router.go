@@ -1,6 +1,7 @@
 package router
 
 import (
+	"errors"
 	"os"
 
 	echojwt "github.com/labstack/echo-jwt/v4"
@@ -26,6 +27,9 @@ func NewRouter(
 		echojwt.WithConfig(echojwt.Config{
 			SigningKey:  []byte(os.Getenv("SECRET_KEY")),
 			TokenLookup: "header:Authorization:Bearer ",
+			ErrorHandler: func(ctx echo.Context, err error) error {
+				return echo.NewHTTPError(401, errors.New("unauthorized"))
+			},
 		}),
 	)
 
@@ -63,8 +67,18 @@ func NewRouter(
 	}
 
 	eu := e.Group("/users")
+	eu.Use(
+		echojwt.WithConfig(echojwt.Config{
+			SigningKey:  []byte(os.Getenv("SECRET_KEY")),
+			TokenLookup: "header:Authorization:Bearer ",
+			ErrorHandler: func(ctx echo.Context, err error) error {
+				return echo.NewHTTPError(401, errors.New("unauthorized"))
+			},
+		}),
+	)
 	{
 		eu.GET("/:user-id", query_controller.GetUser)
+		eu.GET("/me", query_controller.GetMe)
 	}
 
 	return e
