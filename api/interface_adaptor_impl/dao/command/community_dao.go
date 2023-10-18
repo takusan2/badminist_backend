@@ -84,7 +84,7 @@ func (*CommunityDaoImpl) FindPlayerById(
 	var player entity.Player
 	if err := db.
 		Where(
-			"community_id = ? AND player_id = ?",
+			"community_id = ? AND id = ?",
 			communityId.Value(),
 			playerId.Value(),
 		).
@@ -195,7 +195,7 @@ func (*CommunityDaoImpl) DeletePlayer(
 ) error {
 	if err := db.Delete(
 		&entity.Player{},
-		"community_id = ? AND player_id = ?",
+		"community_id = ? AND id = ?",
 		communityId.Value(),
 		playerId.Value(),
 	).Error; err != nil {
@@ -279,9 +279,9 @@ func (*CommunityDaoImpl) UpdatePlayer(
 ) error {
 	if err := db.Model(&entity.Player{}).
 		Where(
-			"community_id = ? AND player_id = ?",
-			communityId,
-			playerId,
+			"community_id = ? AND id = ?",
+			communityId.Value(),
+			playerId.Value(),
 		).Updates(
 		map[string]any{
 			"name":      playerName.Value(),
@@ -306,7 +306,7 @@ func (*CommunityDaoImpl) UpdatePlayerNumGames(
 ) error {
 	if err := db.Model(&entity.Player{}).
 		Where(
-			"community_id = ? AND player_id = ?",
+			"community_id = ? AND id = ?",
 			communityId.Value(),
 			playerId.Value(),
 		).

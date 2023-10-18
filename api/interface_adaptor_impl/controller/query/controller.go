@@ -1,6 +1,7 @@
 package query_controller
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -35,23 +36,24 @@ func (c *controller) GenerateMatchCombination(ctx echo.Context) error {
 	params := ctx.QueryParams()
 	communityId, err := community.CommunityIdFromStr(ctx.Param("community-id"))
 	if err != nil {
-		return ctx.JSON(400, err)
+		return ctx.JSON(400, err.Error())
 	}
 	numCourt, err := strconv.Atoi(params.Get("num-court"))
 	if err != nil {
-		return ctx.JSON(400, err)
+		return ctx.JSON(400, err.Error())
 	}
 	rule, err := query_processor.RuleFromStr(params.Get("rule"))
 	if err != nil {
-		return ctx.JSON(400, err)
+		return ctx.JSON(400, err.Error())
 	}
 	response, err := c.processor.GenerateMatchCombination(
 		communityId,
 		numCourt,
 		rule,
 	)
+	fmt.Print(response, err)
 	if err != nil {
-		return ctx.JSON(500, err)
+		return ctx.JSON(400, err.Error())
 	}
 	return ctx.JSON(200, response)
 }

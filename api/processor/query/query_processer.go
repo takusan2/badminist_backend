@@ -70,14 +70,17 @@ func (q *queryProcessor) GenerateMatchCombination(
 	communityId community.CommunityId,
 	numCourt int,
 	rule Rule,
-) (read_model.MatchCombination, error) {
+) (
+	read_model.MatchCombination,
+	error,
+) {
 	status, _ := player.NewPlayerStatus(player.Attend)
 	players, err := q.communityDao.FindPlayersWithStatusByCommunityId(q.db, communityId, status)
 	if err != nil {
 		return read_model.MatchCombination{}, err
 	}
 	if len(players) < 2 {
-		return read_model.MatchCombination{}, errors.New("not enough attend players")
+		return read_model.MatchCombination{}, errors.New("参加者が足りません")
 	}
 
 	var playerList []read_model.Player
@@ -88,17 +91,17 @@ func (q *queryProcessor) GenerateMatchCombination(
 	var matches []read_model.Match
 	var restPlayer read_model.PlayerList
 	if rule == Singles {
-		matches, restPlayer = q.generateSinglesMatchCombination(playerList, numCourt)
+		matches, restPlayer, err = q.generateSinglesMatchCombination(playerList, numCourt)
 	} else {
-		matches, restPlayer = q.generateDoublesMatchCombination(playerList, numCourt)
+		matches, restPlayer, err = q.generateDoublesMatchCombination(playerList, numCourt)
 	}
-	return read_model.MatchCombination{Matches: matches, RestPlayer: restPlayer}, nil
+	return read_model.MatchCombination{Matches: matches, RestPlayer: restPlayer}, err
 }
 
 func (q *queryProcessor) generateSinglesMatchCombination(
 	players read_model.PlayerList,
 	numCourt int,
-) ([]read_model.Match, read_model.PlayerList) {
+) ([]read_model.Match, read_model.PlayerList, error) {
 	var matches []read_model.Match
 	var restPlayer read_model.PlayerList
 
@@ -108,12 +111,7 @@ func (q *queryProcessor) generateSinglesMatchCombination(
 	})
 
 	if len(players) < numCourt*2 {
-		if len(players)%2 == 0 {
-			restPlayer = read_model.PlayerList{}
-		} else {
-			restPlayer = players[len(players)-1:]
-			players = players[:len(players)-1]
-		}
+		return matches, restPlayer, errors.New("コート数に対して参加者が少ないです")
 	} else {
 		restPlayer = players[numCourt*2:]
 		players = players[:numCourt*2]
@@ -124,13 +122,13 @@ func (q *queryProcessor) generateSinglesMatchCombination(
 		right := read_model.Team{Players: read_model.PlayerList{players[i+1]}}
 		matches = append(matches, read_model.Match{Left: left, Right: right})
 	}
-	return matches, restPlayer
+	return matches, restPlayer, nil
 }
 
 func (q *queryProcessor) generateDoublesMatchCombination(
 	players read_model.PlayerList,
 	numCourt int,
-) ([]read_model.Match, read_model.PlayerList) {
+) ([]read_model.Match, read_model.PlayerList, error) {
 	var matches []read_model.Match
 	var restPlayer read_model.PlayerList
 
@@ -140,12 +138,7 @@ func (q *queryProcessor) generateDoublesMatchCombination(
 	})
 
 	if len(players) < numCourt*4 {
-		if len(players)%4 == 0 {
-			restPlayer = read_model.PlayerList{}
-		} else {
-			restPlayer = players[len(players)-len(players)%4:]
-			players = players[:len(players)-len(players)%4]
-		}
+		return matches, restPlayer, errors.New("コート数に対して参加者が少ないです")
 	} else {
 		restPlayer = players[numCourt*4:]
 		players = players[:numCourt*4]
@@ -156,7 +149,7 @@ func (q *queryProcessor) generateDoublesMatchCombination(
 		right := read_model.Team{Players: read_model.PlayerList{players[i+2], players[i+3]}}
 		matches = append(matches, read_model.Match{Left: left, Right: right})
 	}
-	return matches, restPlayer
+	return matches, restPlayer, nil
 }
 
 func (q *queryProcessor) GetCommunityList(
