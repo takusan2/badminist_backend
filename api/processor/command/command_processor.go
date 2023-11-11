@@ -464,7 +464,7 @@ func (c *commandProcessor) ChangePlayerNumGames(
 	if err := c.communityRepo.ChangePlayerNumGames(
 		event.CommunityId,
 		event.PlayerId,
-		event.NumGames,
+		numGames,
 	); err != nil {
 		return err
 	}
@@ -493,7 +493,7 @@ func (c *commandProcessor) TemporaryRegistration(
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": id.Value(),
-		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+		"exp":     time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
@@ -551,7 +551,7 @@ func (c *commandProcessor) Login(
 	// jwtの発行
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userDomain.BreachEncapsulationOfId().Value(),
-		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+		"exp":     time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
 	if err != nil {

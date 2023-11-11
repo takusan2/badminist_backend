@@ -89,13 +89,13 @@ func (q *queryProcessor) GenerateMatchCombination(
 	}
 
 	var matches []read_model.Match
-	var restPlayer read_model.PlayerList
+	var restPlayers read_model.PlayerList
 	if rule == Singles {
-		matches, restPlayer, err = q.generateSinglesMatchCombination(playerList, numCourt)
+		matches, restPlayers, err = q.generateSinglesMatchCombination(playerList, numCourt)
 	} else {
-		matches, restPlayer, err = q.generateDoublesMatchCombination(playerList, numCourt)
+		matches, restPlayers, err = q.generateDoublesMatchCombination(playerList, numCourt)
 	}
-	return read_model.MatchCombination{Matches: matches, RestPlayer: restPlayer}, err
+	return read_model.MatchCombination{Matches: matches, RestPlayers: restPlayers}, err
 }
 
 func (q *queryProcessor) generateSinglesMatchCombination(
