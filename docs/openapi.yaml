@@ -423,8 +423,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/match'
+        rest_players:
+          type: array
+          items:
+            $ref: '#/components/schemas/playerReadModel'
       required:
         - matches
+        - restPlayers
     success:
       type: object
       properties:
