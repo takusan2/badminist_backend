@@ -1,7 +1,6 @@
 package query_controller
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -51,7 +50,6 @@ func (c *controller) GenerateMatchCombination(ctx echo.Context) error {
 		numCourt,
 		rule,
 	)
-	fmt.Print(response, err)
 	if err != nil {
 		return ctx.JSON(400, err.Error())
 	}

@@ -29,6 +29,7 @@ func init() {
 
 func main() {
 	godotenv.Load(".env")
+
 	db := database.Connect()
 	defer database.CloseDB(db)
 
@@ -60,5 +61,7 @@ func main() {
 	queryController := query_controller.NewController(queryProcessor)
 
 	router := router.NewRouter(commandController, queryController)
-	router.Logger.Fatal(router.Start(":8080"))
+
+	port := os.Getenv("PORT")
+	router.Logger.Fatal(router.Start(":" + port))
 }

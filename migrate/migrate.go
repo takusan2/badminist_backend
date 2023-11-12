@@ -8,6 +8,7 @@ import (
 
 func main() {
 	godotenv.Load(".env")
+
 	dbConn := database.Connect()
 	defer database.CloseDB(dbConn)
 	dbConn.AutoMigrate(
